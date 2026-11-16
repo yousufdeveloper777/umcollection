@@ -55,7 +55,7 @@ function ProductDialog({ product, onClose }: { product: Product; onClose: () => 
     e.preventDefault(); setBusy(true);
     const { error } = await supabase.rpc("place_order", { _name: form.name, _phone: form.phone, _email: form.email, _address: form.address, _notes: form.notes, _items: [{ product_id: product.id, quantity: form.quantity }] });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Order placed! We'll contact you to confirm.");
     qc.invalidateQueries({ queryKey: ["products"] }); onClose();
   }

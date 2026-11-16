@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { redirect: string | undefined } => ({ redirect: typeof s.redirect === "string" ? s.redirect : undefined }),
+  validateSearch: (s: Record<string, unknown>): { redirect: string | undefined } => ({ redirect: typeof s["redirect"] === "string" ? s["redirect"] : undefined }),
   head: () => ({ meta: [
     { title: "Sign in | U M Collection" },
     { name: "description", content: "Sign in to your U M Collection account." },
@@ -39,8 +39,8 @@ function AuthPage() {
     navigate({ to: staff ? "/admin" : "/", replace: true });
   }
   useEffect(() => {
-    routeSignedIn();
-    const { data } = supabase.auth.onAuthStateChange(e => { if (e === "SIGNED_IN") routeSignedIn(); });
+    void routeSignedIn();
+    const { data } = supabase.auth.onAuthStateChange(e => { if (e === "SIGNED_IN") void routeSignedIn(); });
     return () => data.subscription.unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -50,12 +50,12 @@ function AuthPage() {
     if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({ email: form.email, password: form.password, options: { emailRedirectTo: `${window.location.origin}/auth`, data: { full_name: form.name } } });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       if (!data.session) toast.success("Check your email to confirm your account.");
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
     }
   }
   async function oauth(provider: "google" | "lovable") {

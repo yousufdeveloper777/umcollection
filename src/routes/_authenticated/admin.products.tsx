@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { DataTable } from "@/components/admin/data-table";
-import { ConfirmDialog, ImageUploader, PageHeader, StatusBadge, downloadCsv, errMsg } from "@/components/admin/shared";
+import { ConfirmDialog, FilterSelect, ImageUploader, PageHeader, StatusBadge, downloadCsv, errMsg } from "@/components/admin/shared";
 import { useRole } from "@/hooks/use-role";
 import { categoriesQuery, formatPrice, slugify, type Product } from "@/lib/store-data";
 
@@ -36,7 +36,7 @@ function ProductsPage() {
 
   async function bulkStatus(ids: string[], s: string) {
     const { error } = await supabase.from("products").update({ status: s }).in("id", ids);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Status updated"); refresh();
   }
   const columns: ColumnDef<Product, any>[] = [
@@ -65,17 +65,14 @@ function ProductsPage() {
         <Button size="sm" variant="destructive" onClick={() => setToDelete(sel)}><Trash2 /> Delete</Button>
       </>} />
     {form && <ProductForm initial={form} categories={categories} onClose={() => setForm(null)} onSaved={() => { setForm(null); refresh(); }} />}
-    <ConfirmDialog open={!!toDelete} onOpenChange={o => !o && setToDelete(null)} title={`Delete ${toDelete?.length === 1 ? toDelete[0].name : `${toDelete?.length} products`}?`} description="This permanently removes the product from your store." requireType="DELETE" confirmLabel="Delete"
+    <ConfirmDialog open={!!toDelete} onOpenChange={o => !o && setToDelete(null)} title={`Delete ${toDelete?.length === 1 ? toDelete[0]!.name : `${toDelete?.length} products`}?`} description="This permanently removes the product from your store." requireType="DELETE" confirmLabel="Delete"
       onConfirm={async () => { const { error } = await supabase.from("products").delete().in("id", toDelete!.map(p => p.id)); if (error) { toast.error(errMsg(error)); throw error; } toast.success("Deleted"); refresh(); }} />
   </div>;
 }
 
 const toCsv = (p: Product) => ({ name: p.name, sku: p.sku, category: p.categories?.name, price: p.price, compare_at_price: p.compare_at_price, stock: p.stock, status: p.status, created_at: p.created_at });
 
-function FilterSelect({ value, onChange, options, label }: { value: string; onChange: (v: string) => void; options: [string, string][]; label: string }) {
-  return <Select value={value || undefined} onValueChange={onChange}><SelectTrigger aria-label={label} className="h-9 w-auto min-w-[140px] bg-background"><SelectValue placeholder={label} /></SelectTrigger><SelectContent>{options.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent></Select>;
-}
-export { FilterSelect };
+
 
 function InlineStock({ p, onSaved }: { p: Product; onSaved: () => void }) {
   const [v, setV] = useState(String(p.stock));
@@ -94,14 +91,14 @@ function ProductForm({ initial, categories, onClose, onSaved }: { initial: FormS
   const set = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.images.length) return toast.error("Add at least one image");
+    if (!f.images.length) { toast.error("Add at least one image"); return; }
     setBusy(true);
     const list = (s: string) => s.split(",").map(x => x.trim()).filter(Boolean);
     const variants: Variant[] = [{ type: "Size", values: list(f.sizes) }, { type: "Colour", values: list(f.colors) }].filter(v => v.values.length);
-    const payload = { name: f.name.trim(), slug: slugify(f.slug || f.name), description: f.description || null, category_id: f.category_id || null, price: Number(f.price) || 0, compare_at_price: f.compare_at_price ? Number(f.compare_at_price) : null, stock: Math.max(0, parseInt(f.stock) || 0), sku: f.sku || null, images: f.images, primary_image: f.primary_image ?? f.images[0], image_alt: f.name.trim(), variants, status: f.status };
+    const payload = { name: f.name.trim(), slug: slugify(f.slug || f.name), description: f.description || null, category_id: f.category_id || null, price: Number(f.price) || 0, compare_at_price: f.compare_at_price ? Number(f.compare_at_price) : null, stock: Math.max(0, parseInt(f.stock) || 0), sku: f.sku || null, images: f.images, primary_image: f.primary_image ?? f.images[0] ?? null, image_alt: f.name.trim(), variants, status: f.status };
     const { error } = f.id ? await supabase.from("products").update(payload).eq("id", f.id) : await supabase.from("products").insert(payload);
     setBusy(false);
-    if (error) return toast.error(error.code === "23505" ? "That slug is already used" : errMsg(error));
+    if (error) { toast.error(error.code === "23505" ? "That slug is already used" : errMsg(error)); return; }
     toast.success(f.id ? "Product updated" : "Product added"); onSaved();
   }
   return <Dialog open onOpenChange={o => !o && onClose()}>
@@ -111,7 +108,7 @@ function ProductForm({ initial, categories, onClose, onSaved }: { initial: FormS
         <div><Label htmlFor="p-name">Name</Label><Input id="p-name" required value={f.name} onChange={e => setF({ ...f, name: e.target.value, slug: f.id ? f.slug : slugify(e.target.value) })} /></div>
         <div><Label htmlFor="p-slug">Slug</Label><Input id="p-slug" required value={f.slug} onChange={set("slug")} /></div>
         <div className="sm:col-span-2"><Label htmlFor="p-desc">Description</Label><Textarea id="p-desc" value={f.description} onChange={set("description")} /></div>
-        <div><Label>Category</Label><Select value={f.category_id || undefined} onValueChange={v => setF({ ...f, category_id: v })}><SelectTrigger><SelectValue placeholder="Choose category" /></SelectTrigger><SelectContent>{categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select></div>
+        <div><Label>Category</Label><Select {...(f.category_id ? { value: f.category_id } : {})} onValueChange={v => setF({ ...f, category_id: v })}><SelectTrigger><SelectValue placeholder="Choose category" /></SelectTrigger><SelectContent>{categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select></div>
         <div><Label>Status</Label><Select value={f.status} onValueChange={v => setF({ ...f, status: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="active">Active</SelectItem><SelectItem value="draft">Draft</SelectItem><SelectItem value="out_of_stock">Out of stock</SelectItem></SelectContent></Select></div>
         <div><Label htmlFor="p-price">Price (Rs)</Label><Input id="p-price" type="number" min={0} step="0.01" required value={f.price} onChange={set("price")} /></div>
         <div><Label htmlFor="p-compare">Compare-at price (Rs)</Label><Input id="p-compare" type="number" min={0} step="0.01" value={f.compare_at_price} onChange={set("compare_at_price")} /></div>

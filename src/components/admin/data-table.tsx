@@ -31,7 +31,7 @@ export function DataTable<T>({ columns, data, loading, searchPlaceholder, search
     enableSorting: false,
   }, ...columns] : columns;
   const table = useReactTable({
-    data, columns: cols, getRowId,
+    data, columns: cols, ...(getRowId ? { getRowId } : {}),
     state: { sorting, globalFilter, rowSelection },
     onSortingChange: setSorting, onGlobalFilterChange: setGlobalFilter, onRowSelectionChange: setRowSelection,
     globalFilterFn: filterFn, enableRowSelection: !!selectable,
