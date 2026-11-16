@@ -31,6 +31,6 @@ use the editor.
 
 ## Project architecture
 
-- Use `/` for the store introduction, `/accessories` and `/suits` for catalogs, and root-level shared navigation, because visitors need three distinct browsable pages.
+- Use `/` for the store introduction and one route per product category (`/suits`, `/dresses`, `/loungewear`, `/bags`, `/jewellery`, `/watches`, `/shoes`, `/accessories`) sharing the same catalog component, because the owner wants each category browsable on its own page.
 - Keep imported product photography in Lovable Assets and generated editorial imagery separate from catalog data, because inspiration must not be confused with available products.
 - Share product data and catalog controls across collection pages, because search and favourites should behave consistently.
