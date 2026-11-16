@@ -105,7 +105,7 @@ export const Route = createFileRoute("/")({
   component: U M CollectionHome,
 });
 
-function U M CollectionHome() {
+function CollectionHome() {
   const [activeCategory, setActiveCategory] = useState<(typeof categories)[number]>("All pieces");
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");

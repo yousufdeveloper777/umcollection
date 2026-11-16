@@ -28,3 +28,7 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project architecture
+
+- Build the shop's public storefront in the TanStack Start `/` route and keep imported product photography in Lovable Assets, because visitors should see the catalog immediately without external media dependencies.
