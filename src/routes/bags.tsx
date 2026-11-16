@@ -9,4 +9,4 @@ export const Route = createFileRoute("/bags")({
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }
   ] }), component: CatalogPage,
 });
-function CatalogPage() { return <main><div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:px-14"><p className="mb-3 text-xs text-muted-foreground">U M Collection</p><h1 className="font-display text-5xl sm:text-6xl">Bags</h1><p className="mt-4 text-sm text-muted-foreground">Handbags for every occasion.</p></div><ProductCatalog categories={["Bags"]} /></main>; }
+function CatalogPage() { return <main><div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:px-14"><p className="mb-3 text-xs text-muted-foreground">U M Collection</p><h1 className="font-display text-5xl sm:text-6xl">Bags</h1><p className="mt-4 text-sm text-muted-foreground">Handbags for every occasion.</p></div><ProductCatalog categories={["bags"]} /></main>; }
