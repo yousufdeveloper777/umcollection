@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>): { redirect: string | undefined } => ({ redirect: typeof s.redirect === "string" ? s.redirect : undefined }),
+  validateSearch: (s: Record<string, unknown>): { redirect: string | undefined } => ({ redirect: typeof s["redirect"] === "string" ? s["redirect"] : undefined }),
   head: () => ({ meta: [
     { title: "Sign in | U M Collection" },
     { name: "description", content: "Sign in to your U M Collection account." },
@@ -39,8 +39,8 @@ function AuthPage() {
     navigate({ to: staff ? "/admin" : "/", replace: true });
   }
   useEffect(() => {
-    routeSignedIn();
-    const { data } = supabase.auth.onAuthStateChange(e => { if (e === "SIGNED_IN") routeSignedIn(); });
+    void routeSignedIn();
+    const { data } = supabase.auth.onAuthStateChange(e => { if (e === "SIGNED_IN") void routeSignedIn(); });
     return () => data.subscription.unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
