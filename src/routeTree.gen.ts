@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AccessoriesRouteImport } from './routes/accessories'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BagsRouteImport } from './routes/bags'
 import { Route as DressesRouteImport } from './routes/dresses'
 import { Route as JewelleryRouteImport } from './routes/jewellery'
@@ -18,15 +20,25 @@ import { Route as LoungewearRouteImport } from './routes/loungewear'
 import { Route as ShoesRouteImport } from './routes/shoes'
 import { Route as SuitsRouteImport } from './routes/suits'
 import { Route as WatchesRouteImport } from './routes/watches'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccessoriesRoute = AccessoriesRouteImport.update({
   id: '/accessories',
   path: '/accessories',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BagsRoute = BagsRouteImport.update({
@@ -64,10 +76,16 @@ const WatchesRoute = WatchesRouteImport.update({
   path: '/watches',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accessories': typeof AccessoriesRoute
+  '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
@@ -75,10 +93,12 @@ export interface FileRoutesByFullPath {
   '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
+  '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accessories': typeof AccessoriesRoute
+  '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
@@ -86,11 +106,14 @@ export interface FileRoutesByTo {
   '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
+  '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/accessories': typeof AccessoriesRoute
+  '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
@@ -98,12 +121,14 @@ export interface FileRoutesById {
   '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/accessories'
+    | '/auth'
     | '/bags'
     | '/dresses'
     | '/jewellery'
@@ -111,10 +136,12 @@ export interface FileRouteTypes {
     | '/shoes'
     | '/suits'
     | '/watches'
+    | '/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/accessories'
+    | '/auth'
     | '/bags'
     | '/dresses'
     | '/jewellery'
@@ -122,10 +149,13 @@ export interface FileRouteTypes {
     | '/shoes'
     | '/suits'
     | '/watches'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/accessories'
+    | '/auth'
     | '/bags'
     | '/dresses'
     | '/jewellery'
@@ -133,11 +163,14 @@ export interface FileRouteTypes {
     | '/shoes'
     | '/suits'
     | '/watches'
+    | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AccessoriesRoute: typeof AccessoriesRoute
+  AuthRoute: typeof AuthRoute
   BagsRoute: typeof BagsRoute
   DressesRoute: typeof DressesRoute
   JewelleryRoute: typeof JewelleryRoute
@@ -156,11 +189,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/accessories': {
       id: '/accessories'
       path: '/accessories'
       fullPath: '/accessories'
       preLoaderRoute: typeof AccessoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bags': {
@@ -212,12 +259,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AccessoriesRoute: AccessoriesRoute,
+  AuthRoute: AuthRoute,
   BagsRoute: BagsRoute,
   DressesRoute: DressesRoute,
   JewelleryRoute: JewelleryRoute,
