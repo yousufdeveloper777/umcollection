@@ -11,7 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccessoriesRouteImport } from './routes/accessories'
+import { Route as BagsRouteImport } from './routes/bags'
+import { Route as DressesRouteImport } from './routes/dresses'
+import { Route as JewelleryRouteImport } from './routes/jewellery'
+import { Route as LoungewearRouteImport } from './routes/loungewear'
+import { Route as ShoesRouteImport } from './routes/shoes'
 import { Route as SuitsRouteImport } from './routes/suits'
+import { Route as WatchesRouteImport } from './routes/watches'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +29,122 @@ const AccessoriesRoute = AccessoriesRouteImport.update({
   path: '/accessories',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BagsRoute = BagsRouteImport.update({
+  id: '/bags',
+  path: '/bags',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DressesRoute = DressesRouteImport.update({
+  id: '/dresses',
+  path: '/dresses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JewelleryRoute = JewelleryRouteImport.update({
+  id: '/jewellery',
+  path: '/jewellery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoungewearRoute = LoungewearRouteImport.update({
+  id: '/loungewear',
+  path: '/loungewear',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShoesRoute = ShoesRouteImport.update({
+  id: '/shoes',
+  path: '/shoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SuitsRoute = SuitsRouteImport.update({
   id: '/suits',
   path: '/suits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WatchesRoute = WatchesRouteImport.update({
+  id: '/watches',
+  path: '/watches',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/accessories': typeof AccessoriesRoute
+  '/bags': typeof BagsRoute
+  '/dresses': typeof DressesRoute
+  '/jewellery': typeof JewelleryRoute
+  '/loungewear': typeof LoungewearRoute
+  '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
+  '/watches': typeof WatchesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/accessories': typeof AccessoriesRoute
+  '/bags': typeof BagsRoute
+  '/dresses': typeof DressesRoute
+  '/jewellery': typeof JewelleryRoute
+  '/loungewear': typeof LoungewearRoute
+  '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
+  '/watches': typeof WatchesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/accessories': typeof AccessoriesRoute
+  '/bags': typeof BagsRoute
+  '/dresses': typeof DressesRoute
+  '/jewellery': typeof JewelleryRoute
+  '/loungewear': typeof LoungewearRoute
+  '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
+  '/watches': typeof WatchesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/accessories' | '/suits'
+  fullPaths:
+    | '/'
+    | '/accessories'
+    | '/bags'
+    | '/dresses'
+    | '/jewellery'
+    | '/loungewear'
+    | '/shoes'
+    | '/suits'
+    | '/watches'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/accessories' | '/suits'
-  id: '__root__' | '/' | '/accessories' | '/suits'
+  to:
+    | '/'
+    | '/accessories'
+    | '/bags'
+    | '/dresses'
+    | '/jewellery'
+    | '/loungewear'
+    | '/shoes'
+    | '/suits'
+    | '/watches'
+  id:
+    | '__root__'
+    | '/'
+    | '/accessories'
+    | '/bags'
+    | '/dresses'
+    | '/jewellery'
+    | '/loungewear'
+    | '/shoes'
+    | '/suits'
+    | '/watches'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccessoriesRoute: typeof AccessoriesRoute
+  BagsRoute: typeof BagsRoute
+  DressesRoute: typeof DressesRoute
+  JewelleryRoute: typeof JewelleryRoute
+  LoungewearRoute: typeof LoungewearRoute
+  ShoesRoute: typeof ShoesRoute
   SuitsRoute: typeof SuitsRoute
+  WatchesRoute: typeof WatchesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,11 +163,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccessoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bags': {
+      id: '/bags'
+      path: '/bags'
+      fullPath: '/bags'
+      preLoaderRoute: typeof BagsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dresses': {
+      id: '/dresses'
+      path: '/dresses'
+      fullPath: '/dresses'
+      preLoaderRoute: typeof DressesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jewellery': {
+      id: '/jewellery'
+      path: '/jewellery'
+      fullPath: '/jewellery'
+      preLoaderRoute: typeof JewelleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loungewear': {
+      id: '/loungewear'
+      path: '/loungewear'
+      fullPath: '/loungewear'
+      preLoaderRoute: typeof LoungewearRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shoes': {
+      id: '/shoes'
+      path: '/shoes'
+      fullPath: '/shoes'
+      preLoaderRoute: typeof ShoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/suits': {
       id: '/suits'
       path: '/suits'
       fullPath: '/suits'
       preLoaderRoute: typeof SuitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/watches': {
+      id: '/watches'
+      path: '/watches'
+      fullPath: '/watches'
+      preLoaderRoute: typeof WatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -88,7 +218,13 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccessoriesRoute: AccessoriesRoute,
+  BagsRoute: BagsRoute,
+  DressesRoute: DressesRoute,
+  JewelleryRoute: JewelleryRoute,
+  LoungewearRoute: LoungewearRoute,
+  ShoesRoute: ShoesRoute,
   SuitsRoute: SuitsRoute,
+  WatchesRoute: WatchesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
