@@ -13,8 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { DataTable } from "@/components/admin/data-table";
-import { PageHeader, StatusBadge, errMsg } from "@/components/admin/shared";
-import { FilterSelect } from "./admin.products";
+import { FilterSelect, PageHeader, StatusBadge, errMsg } from "@/components/admin/shared";
 import { useRole } from "@/hooks/use-role";
 import { formatPrice, settingsQuery } from "@/lib/store-data";
 

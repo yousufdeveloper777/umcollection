@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { DataTable } from "@/components/admin/data-table";
-import { ConfirmDialog, ImageUploader, PageHeader, StatusBadge, downloadCsv, errMsg } from "@/components/admin/shared";
+import { ConfirmDialog, FilterSelect, ImageUploader, PageHeader, StatusBadge, downloadCsv, errMsg } from "@/components/admin/shared";
 import { useRole } from "@/hooks/use-role";
 import { categoriesQuery, formatPrice, slugify, type Product } from "@/lib/store-data";
 
@@ -72,10 +72,7 @@ function ProductsPage() {
 
 const toCsv = (p: Product) => ({ name: p.name, sku: p.sku, category: p.categories?.name, price: p.price, compare_at_price: p.compare_at_price, stock: p.stock, status: p.status, created_at: p.created_at });
 
-function FilterSelect({ value, onChange, options, label }: { value: string; onChange: (v: string) => void; options: [string, string][]; label: string }) {
-  return <Select value={value || undefined} onValueChange={onChange}><SelectTrigger aria-label={label} className="h-9 w-auto min-w-[140px] bg-background"><SelectValue placeholder={label} /></SelectTrigger><SelectContent>{options.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}</SelectContent></Select>;
-}
-export { FilterSelect };
+
 
 function InlineStock({ p, onSaved }: { p: Product; onSaved: () => void }) {
   const [v, setV] = useState(String(p.stock));
