@@ -50,12 +50,12 @@ function AuthPage() {
     if (mode === "signup") {
       const { data, error } = await supabase.auth.signUp({ email: form.email, password: form.password, options: { emailRedirectTo: `${window.location.origin}/auth`, data: { full_name: form.name } } });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       if (!data.session) toast.success("Check your email to confirm your account.");
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email: form.email, password: form.password });
       setBusy(false);
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
     }
   }
   async function oauth(provider: "google" | "lovable") {

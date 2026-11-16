@@ -36,7 +36,7 @@ function ProductsPage() {
 
   async function bulkStatus(ids: string[], s: string) {
     const { error } = await supabase.from("products").update({ status: s }).in("id", ids);
-    if (error) return toast.error(errMsg(error));
+    if (error) { toast.error(errMsg(error)); return; }
     toast.success("Status updated"); refresh();
   }
   const columns: ColumnDef<Product, any>[] = [
@@ -94,14 +94,14 @@ function ProductForm({ initial, categories, onClose, onSaved }: { initial: FormS
   const set = (k: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setF({ ...f, [k]: e.target.value });
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    if (!f.images.length) return toast.error("Add at least one image");
+    if (!f.images.length) { toast.error("Add at least one image"); return; }
     setBusy(true);
     const list = (s: string) => s.split(",").map(x => x.trim()).filter(Boolean);
     const variants: Variant[] = [{ type: "Size", values: list(f.sizes) }, { type: "Colour", values: list(f.colors) }].filter(v => v.values.length);
     const payload = { name: f.name.trim(), slug: slugify(f.slug || f.name), description: f.description || null, category_id: f.category_id || null, price: Number(f.price) || 0, compare_at_price: f.compare_at_price ? Number(f.compare_at_price) : null, stock: Math.max(0, parseInt(f.stock) || 0), sku: f.sku || null, images: f.images, primary_image: f.primary_image ?? f.images[0], image_alt: f.name.trim(), variants, status: f.status };
     const { error } = f.id ? await supabase.from("products").update(payload).eq("id", f.id) : await supabase.from("products").insert(payload);
     setBusy(false);
-    if (error) return toast.error(error.code === "23505" ? "That slug is already used" : errMsg(error));
+    if (error) { toast.error(error.code === "23505" ? "That slug is already used" : errMsg(error)); return; }
     toast.success(f.id ? "Product updated" : "Product added"); onSaved();
   }
   return <Dialog open onOpenChange={o => !o && onClose()}>
