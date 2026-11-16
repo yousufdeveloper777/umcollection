@@ -14,13 +14,17 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AccessoriesRouteImport } from './routes/accessories'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BagsRouteImport } from './routes/bags'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as DressesRouteImport } from './routes/dresses'
 import { Route as JewelleryRouteImport } from './routes/jewellery'
 import { Route as LoungewearRouteImport } from './routes/loungewear'
 import { Route as ShoesRouteImport } from './routes/shoes'
 import { Route as SuitsRouteImport } from './routes/suits'
 import { Route as WatchesRouteImport } from './routes/watches'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminAuditRouteImport } from './routes/_authenticated/admin.audit'
 import { Route as AuthenticatedAdminCategoriesRouteImport } from './routes/_authenticated/admin.categories'
@@ -54,6 +58,16 @@ const BagsRoute = BagsRouteImport.update({
   path: '/bags',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DressesRoute = DressesRouteImport.update({
   id: '/dresses',
   path: '/dresses',
@@ -84,10 +98,20 @@ const WatchesRoute = WatchesRouteImport.update({
   path: '/watches',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ProductSlugRoute = ProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
   id: '/',
@@ -141,13 +165,17 @@ export interface FileRoutesByFullPath {
   '/accessories': typeof AccessoriesRoute
   '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
   '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
+  '/account': typeof AuthenticatedAccountRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/product/$slug': typeof ProductSlugRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
@@ -162,12 +190,16 @@ export interface FileRoutesByTo {
   '/accessories': typeof AccessoriesRoute
   '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
   '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/product/$slug': typeof ProductSlugRoute
   '/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/admin/content': typeof AuthenticatedAdminContentRoute
@@ -184,13 +216,17 @@ export interface FileRoutesById {
   '/accessories': typeof AccessoriesRoute
   '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
   '/shoes': typeof ShoesRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/product/$slug': typeof ProductSlugRoute
   '/_authenticated/admin/audit': typeof AuthenticatedAdminAuditRoute
   '/_authenticated/admin/categories': typeof AuthenticatedAdminCategoriesRoute
   '/_authenticated/admin/content': typeof AuthenticatedAdminContentRoute
@@ -207,13 +243,17 @@ export interface FileRouteTypes {
     | '/accessories'
     | '/auth'
     | '/bags'
+    | '/cart'
+    | '/checkout'
     | '/dresses'
     | '/jewellery'
     | '/loungewear'
     | '/shoes'
     | '/suits'
     | '/watches'
+    | '/account'
     | '/admin'
+    | '/product/$slug'
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/content'
@@ -228,12 +268,16 @@ export interface FileRouteTypes {
     | '/accessories'
     | '/auth'
     | '/bags'
+    | '/cart'
+    | '/checkout'
     | '/dresses'
     | '/jewellery'
     | '/loungewear'
     | '/shoes'
     | '/suits'
     | '/watches'
+    | '/account'
+    | '/product/$slug'
     | '/admin/audit'
     | '/admin/categories'
     | '/admin/content'
@@ -249,13 +293,17 @@ export interface FileRouteTypes {
     | '/accessories'
     | '/auth'
     | '/bags'
+    | '/cart'
+    | '/checkout'
     | '/dresses'
     | '/jewellery'
     | '/loungewear'
     | '/shoes'
     | '/suits'
     | '/watches'
+    | '/_authenticated/account'
     | '/_authenticated/admin'
+    | '/product/$slug'
     | '/_authenticated/admin/audit'
     | '/_authenticated/admin/categories'
     | '/_authenticated/admin/content'
@@ -272,12 +320,15 @@ export interface RootRouteChildren {
   AccessoriesRoute: typeof AccessoriesRoute
   AuthRoute: typeof AuthRoute
   BagsRoute: typeof BagsRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
   DressesRoute: typeof DressesRoute
   JewelleryRoute: typeof JewelleryRoute
   LoungewearRoute: typeof LoungewearRoute
   ShoesRoute: typeof ShoesRoute
   SuitsRoute: typeof SuitsRoute
   WatchesRoute: typeof WatchesRoute
+  ProductSlugRoute: typeof ProductSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -315,6 +366,20 @@ declare module '@tanstack/react-router' {
       path: '/bags'
       fullPath: '/bags'
       preLoaderRoute: typeof BagsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dresses': {
@@ -359,12 +424,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WatchesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin/': {
       id: '/_authenticated/admin/'
@@ -451,10 +530,12 @@ const AuthenticatedAdminRouteWithChildren =
   AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
 }
 
@@ -467,12 +548,15 @@ const rootRouteChildren: RootRouteChildren = {
   AccessoriesRoute: AccessoriesRoute,
   AuthRoute: AuthRoute,
   BagsRoute: BagsRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
   DressesRoute: DressesRoute,
   JewelleryRoute: JewelleryRoute,
   LoungewearRoute: LoungewearRoute,
   ShoesRoute: ShoesRoute,
   SuitsRoute: SuitsRoute,
   WatchesRoute: WatchesRoute,
+  ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
