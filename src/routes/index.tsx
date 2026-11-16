@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/button";
 import blackHandbag from "@/assets/black-handbag.jpeg.asset.json";
 import burgundySuit from "@/assets/burgundy-suit.jpeg.asset.json";
 import miniHandbags from "@/assets/mini-handbags.jpeg.asset.json";
+import luxuryWatchSet from "@/assets/luxury-watch-set.jpeg.asset.json";
+import pearlBowHeels from "@/assets/pearl-bow-heels.jpeg.asset.json";
 import pearlJewellery from "@/assets/pearl-jewellery.jpeg.asset.json";
+import smartwatchBundle from "@/assets/smartwatch-bundle.jpeg.asset.json";
 import walletPhoto from "@/assets/wallet.jpeg.asset.json";
 import watchCollection from "@/assets/watch-collection.jpeg.asset.json";
 import whiteChainHandbag from "@/assets/white-chain-handbag.jpeg.asset.json";
 
-type Category = "Suits" | "Jewellery" | "Bags" | "Accessories";
+type Category = "Suits" | "Jewellery" | "Bags" | "Shoes" | "Watches" | "Accessories";
 
 type Product = {
   name: string;
@@ -52,9 +55,27 @@ const products: Product[] = [
   },
   {
     name: "Watch Collection",
-    category: "Accessories",
+    category: "Watches",
     image: watchCollection.url,
     imageAlt: "Assorted watches arranged in a presentation box",
+  },
+  {
+    name: "Luxury Watch Set",
+    category: "Watches",
+    image: luxuryWatchSet.url,
+    imageAlt: "Four luxury wristwatches in an illuminated presentation box",
+  },
+  {
+    name: "Smartwatch Bundle",
+    category: "Watches",
+    image: smartwatchBundle.url,
+    imageAlt: "Smartwatch with wireless earbuds and a set of interchangeable straps",
+  },
+  {
+    name: "Pearl Bow Heels",
+    category: "Shoes",
+    image: pearlBowHeels.url,
+    imageAlt: "Pointed slingback heels with pearl bows in silver, black and champagne gold",
   },
   {
     name: "Everyday Wallet",
@@ -69,22 +90,25 @@ const categories: (Category | "All pieces")[] = [
   "Suits",
   "Jewellery",
   "Bags",
+  "Shoes",
+  "Watches",
   "Accessories",
 ];
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "U M Collection | Suits, Jewellery & Accessories" },
+      { title: "U M Collection | Suits, Jewellery, Bags, Shoes & Watches" },
       {
         name: "description",
         content:
-          "Explore elegant women's suits, jewellery, handbags and accessories at U M Collection.",
+          "Explore elegant women's suits, jewellery, handbags, shoes, watches and accessories at U M Collection.",
       },
       { property: "og:title", content: "U M Collection | Women's Fashion" },
       {
         property: "og:description",
-        content: "A considered edit of women's suits, jewellery, handbags and accessories.",
+        content:
+          "A considered edit of women's suits, jewellery, handbags, shoes, watches and accessories.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -136,7 +160,7 @@ function CollectionHome() {
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <div className="flex min-h-8 items-center justify-center bg-ink px-4 py-2 text-center text-[10px] font-medium uppercase tracking-[0.14em] text-primary">
-        <span>Women's suits · jewellery · bags · accessories</span>
+        <span>Women's suits · jewellery · bags · shoes · watches</span>
       </div>
 
       <header className="relative z-10 border-b border-border/70 bg-background">
@@ -239,7 +263,7 @@ function CollectionHome() {
                   setQuery(event.target.value);
                   document.getElementById("shop")?.scrollIntoView({ behavior: "smooth" });
                 }}
-                placeholder="Search suits, jewellery, bags..."
+                placeholder="Search suits, jewellery, bags, shoes..."
                 className="w-full border-0 bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground focus:ring-0"
               />
             </label>
@@ -304,12 +328,13 @@ function CollectionHome() {
             </a>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
             {[
               { name: "Suits", image: burgundySuit.url, alt: "Burgundy embroidered women's suit" },
               { name: "Jewellery", image: pearlJewellery.url, alt: "Pearl jewellery set" },
               { name: "Handbags", image: miniHandbags.url, alt: "Small handbags in an assortment of colours" },
-              { name: "Accessories", image: watchCollection.url, alt: "A collection of wristwatches" },
+              { name: "Shoes", image: pearlBowHeels.url, alt: "Pearl bow slingback heels in three colours" },
+              { name: "Watches", image: luxuryWatchSet.url, alt: "Luxury wristwatches in a presentation box" },
             ].map((category) => (
               <button
                 key={category.name}
