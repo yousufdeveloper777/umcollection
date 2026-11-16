@@ -8,3 +8,4 @@
 - [x] Create an introduction homepage with AI fashion imagery and separate accessories and clothing pages.
 - [x] Verify all three pages and mobile navigation.
 - [ ] Add prices and order details when supplied by the user.
+- [x] Admin panel at /admin (products, categories, orders, customers, content, settings, audit logs) with online ordering

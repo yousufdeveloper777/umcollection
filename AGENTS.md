@@ -34,3 +34,7 @@ use the editor.
 - Use `/` for the store introduction and one route per product category (`/suits`, `/dresses`, `/loungewear`, `/bags`, `/jewellery`, `/watches`, `/shoes`, `/accessories`) sharing the same catalog component, because the owner wants each category browsable on its own page.
 - Keep imported product photography in Lovable Assets and generated editorial imagery separate from catalog data, because inspiration must not be confused with available products.
 - Share product data and catalog controls across collection pages, because search and favourites should behave consistently.
+
+- Products, categories, homepage content, settings and orders live in Lovable Cloud tables; the public site and `/admin` read the same data, so never reintroduce static product lists.
+- Admin permissions are enforced by RLS via `has_role`/`is_staff` (roles in `user_roles`); the first account to sign up becomes `super_admin`. Frontend `useRole` is only a UI hint.
+- Product images go to the private `product-images` bucket and are stored as long-lived signed URLs, because public buckets are blocked in this workspace.
