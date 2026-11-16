@@ -65,7 +65,7 @@ function ProductsPage() {
         <Button size="sm" variant="destructive" onClick={() => setToDelete(sel)}><Trash2 /> Delete</Button>
       </>} />
     {form && <ProductForm initial={form} categories={categories} onClose={() => setForm(null)} onSaved={() => { setForm(null); refresh(); }} />}
-    <ConfirmDialog open={!!toDelete} onOpenChange={o => !o && setToDelete(null)} title={`Delete ${toDelete?.length === 1 ? toDelete[0].name : `${toDelete?.length} products`}?`} description="This permanently removes the product from your store." requireType="DELETE" confirmLabel="Delete"
+    <ConfirmDialog open={!!toDelete} onOpenChange={o => !o && setToDelete(null)} title={`Delete ${toDelete?.length === 1 ? toDelete[0]!.name : `${toDelete?.length} products`}?`} description="This permanently removes the product from your store." requireType="DELETE" confirmLabel="Delete"
       onConfirm={async () => { const { error } = await supabase.from("products").delete().in("id", toDelete!.map(p => p.id)); if (error) { toast.error(errMsg(error)); throw error; } toast.success("Deleted"); refresh(); }} />
   </div>;
 }
