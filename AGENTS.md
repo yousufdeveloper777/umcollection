@@ -38,3 +38,4 @@ use the editor.
 - Products, categories, homepage content, settings and orders live in Lovable Cloud tables; the public site and `/admin` read the same data, so never reintroduce static product lists.
 - Admin permissions are enforced by RLS via `has_role`/`is_staff` (roles in `user_roles`); the first account to sign up becomes `super_admin`. Frontend `useRole` is only a UI hint.
 - Product images go to the private `product-images` bucket and are stored as long-lived signed URLs, because public buckets are blocked in this workspace.
+- Cart lives in localStorage; guest wishlist in localStorage and merges into the `wishlists` table on sign-in. Checkout goes through the `checkout` RPC, which reprices items, applies coupons and shipping server-side, because browser totals cannot be trusted.
