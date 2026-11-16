@@ -31,4 +31,6 @@ use the editor.
 
 ## Project architecture
 
-- Build the shop's public storefront in the TanStack Start `/` route and keep imported product photography in Lovable Assets, because visitors should see the catalog immediately without external media dependencies.
+- Use `/` for the store introduction, `/accessories` and `/suits` for catalogs, and root-level shared navigation, because visitors need three distinct browsable pages.
+- Keep imported product photography in Lovable Assets and generated editorial imagery separate from catalog data, because inspiration must not be confused with available products.
+- Share product data and catalog controls across collection pages, because search and favourites should behave consistently.
