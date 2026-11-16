@@ -33,7 +33,7 @@ export function StatusBadge({ status }: { status: string }) {
   return <Badge variant={statusTone[status] ?? "outline"} className="whitespace-nowrap capitalize">{status.replace(/_/g, " ")}</Badge>;
 }
 
-export function ImageUploader({ images, primary, onChange, multiple = true, folder }: { images: string[]; primary?: string | null; onChange: (images: string[], primary: string | null) => void; multiple?: boolean; folder?: string }) {
+export function ImageUploader({ images, primary, onChange, multiple = true, folder }: { images: string[]; primary?: string | null | undefined; onChange: (images: string[], primary: string | null) => void; multiple?: boolean; folder?: string }) {
   const [busy, setBusy] = useState(false);
   async function add(files: FileList | null) {
     if (!files?.length) return;

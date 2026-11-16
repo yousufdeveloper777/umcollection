@@ -53,7 +53,7 @@ function CategoriesPage() {
   </div>;
 }
 
-function Row({ c, parent, count, canEdit, onEdit, onDelete }: { c: Category; parent?: string; count: number; canEdit: boolean; onEdit: () => void; onDelete: () => void }) {
+function Row({ c, parent, count, canEdit, onEdit, onDelete }: { c: Category; parent?: string | undefined; count: number; canEdit: boolean; onEdit: () => void; onDelete: () => void }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: c.id, disabled: !canEdit });
   return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className="flex items-center gap-3 bg-card p-3">
     {canEdit && <button {...attributes} {...listeners} aria-label={`Reorder ${c.name}`} className="cursor-grab text-muted-foreground"><GripVertical className="size-4" /></button>}

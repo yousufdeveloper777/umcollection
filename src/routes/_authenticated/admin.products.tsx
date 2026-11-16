@@ -95,7 +95,7 @@ function ProductForm({ initial, categories, onClose, onSaved }: { initial: FormS
     setBusy(true);
     const list = (s: string) => s.split(",").map(x => x.trim()).filter(Boolean);
     const variants: Variant[] = [{ type: "Size", values: list(f.sizes) }, { type: "Colour", values: list(f.colors) }].filter(v => v.values.length);
-    const payload = { name: f.name.trim(), slug: slugify(f.slug || f.name), description: f.description || null, category_id: f.category_id || null, price: Number(f.price) || 0, compare_at_price: f.compare_at_price ? Number(f.compare_at_price) : null, stock: Math.max(0, parseInt(f.stock) || 0), sku: f.sku || null, images: f.images, primary_image: f.primary_image ?? f.images[0], image_alt: f.name.trim(), variants, status: f.status };
+    const payload = { name: f.name.trim(), slug: slugify(f.slug || f.name), description: f.description || null, category_id: f.category_id || null, price: Number(f.price) || 0, compare_at_price: f.compare_at_price ? Number(f.compare_at_price) : null, stock: Math.max(0, parseInt(f.stock) || 0), sku: f.sku || null, images: f.images, primary_image: f.primary_image ?? f.images[0] ?? null, image_alt: f.name.trim(), variants, status: f.status };
     const { error } = f.id ? await supabase.from("products").update(payload).eq("id", f.id) : await supabase.from("products").insert(payload);
     setBusy(false);
     if (error) { toast.error(error.code === "23505" ? "That slug is already used" : errMsg(error)); return; }
@@ -108,7 +108,7 @@ function ProductForm({ initial, categories, onClose, onSaved }: { initial: FormS
         <div><Label htmlFor="p-name">Name</Label><Input id="p-name" required value={f.name} onChange={e => setF({ ...f, name: e.target.value, slug: f.id ? f.slug : slugify(e.target.value) })} /></div>
         <div><Label htmlFor="p-slug">Slug</Label><Input id="p-slug" required value={f.slug} onChange={set("slug")} /></div>
         <div className="sm:col-span-2"><Label htmlFor="p-desc">Description</Label><Textarea id="p-desc" value={f.description} onChange={set("description")} /></div>
-        <div><Label>Category</Label><Select value={f.category_id || undefined} onValueChange={v => setF({ ...f, category_id: v })}><SelectTrigger><SelectValue placeholder="Choose category" /></SelectTrigger><SelectContent>{categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select></div>
+        <div><Label>Category</Label><Select {...(f.category_id ? { value: f.category_id } : {})} onValueChange={v => setF({ ...f, category_id: v })}><SelectTrigger><SelectValue placeholder="Choose category" /></SelectTrigger><SelectContent>{categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select></div>
         <div><Label>Status</Label><Select value={f.status} onValueChange={v => setF({ ...f, status: v })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="active">Active</SelectItem><SelectItem value="draft">Draft</SelectItem><SelectItem value="out_of_stock">Out of stock</SelectItem></SelectContent></Select></div>
         <div><Label htmlFor="p-price">Price (Rs)</Label><Input id="p-price" type="number" min={0} step="0.01" required value={f.price} onChange={set("price")} /></div>
         <div><Label htmlFor="p-compare">Compare-at price (Rs)</Label><Input id="p-compare" type="number" min={0} step="0.01" value={f.compare_at_price} onChange={set("compare_at_price")} /></div>
