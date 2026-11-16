@@ -102,7 +102,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  component: U M CollectionHome,
+  component: CollectionHome,
 });
 
 function CollectionHome() {
