@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
 function CollectionHome() {
   return <main>
     <section className="relative h-[520px] overflow-hidden bg-ink md:h-[560px]">
-      <img src={editorial} alt="AI fashion editorial of emerald and rose embroidered suits" width={1536} height={1024} fetchPriority="high" className="absolute inset-0 size-full object-cover object-[65%_center] md:object-center" />
+      <img src={editorial} alt="AI fashion editorial of emerald and rose embroidered suits" width={1536} height={1024} fetchPriority="high" className="absolute inset-0 size-full object-cover object-[65%_center] md:object-top" />
       <div className="absolute inset-0 bg-ink/45 md:bg-ink/10" />
       <div className="relative mx-auto flex h-full max-w-[1440px] flex-col justify-center px-5 text-paper sm:px-8 lg:px-14">
         <p className="mb-5 text-xs text-gold">Style for every side of you</p>
