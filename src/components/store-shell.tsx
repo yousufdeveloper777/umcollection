@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ArrowUpRight, User, LayoutDashboard } from "lucide-react";
+import { Menu, X, ArrowUpRight, User, LayoutDashboard, ShoppingBag } from "lucide-react";
+import { useCart } from "@/lib/cart";
 import { useRole } from "@/hooks/use-role";
 import { Button } from "@/components/ui/button";
 
@@ -24,7 +25,7 @@ export function StoreHeader() {
       <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4 px-5 py-5 sm:px-8 lg:px-14">
         <Link to="/" className="shrink-0 font-display text-3xl sm:text-4xl">U M Collection</Link>
         <nav aria-label="Main navigation" className="hidden flex-wrap items-center justify-end gap-x-5 gap-y-2 md:flex">{pages.map(p => <Link key={p.to} to={p.to} activeOptions={{ exact: true }} activeProps={{ className: "text-foreground border-primary" }} inactiveProps={{ className: "text-muted-foreground border-transparent" }} className="border-b pb-1 text-xs transition-colors hover:text-foreground">{p.label}</Link>)}</nav>
-        <AccountLink />
+        <div className="flex items-center gap-1"><AccountLink /><CartLink /></div>
         <Button variant="ghost" size="icon" className="md:hidden" aria-label={open ? "Close menu" : "Open menu"} onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</Button>
       </div>
       {open && <nav aria-label="Mobile navigation" className="grid border-t border-border px-5 md:hidden">{pages.map(p => <Link key={p.to} to={p.to} onClick={() => setOpen(false)} className="border-b border-border py-4 text-sm last:border-0">{p.label}</Link>)}</nav>}
@@ -39,6 +40,11 @@ export function StoreFooter() {
 function AccountLink() {
   const { user, isStaff } = useRole();
   if (isStaff) return <Button asChild variant="outline" size="sm" className="rounded-none"><Link to="/admin"><LayoutDashboard /> Admin</Link></Button>;
-  if (user) return null;
+  if (user) return <Button asChild variant="ghost" size="icon" aria-label="My account"><Link to="/account"><User /></Link></Button>;
   return <Button asChild variant="ghost" size="icon" aria-label="Sign in"><Link to="/auth" search={{ redirect: undefined }}><User /></Link></Button>;
+}
+
+function CartLink() {
+  const { count } = useCart();
+  return <Button asChild variant="ghost" size="icon" aria-label={`Cart, ${count} items`} className="relative"><Link to="/cart"><ShoppingBag />{count > 0 && <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground">{count}</span>}</Link></Button>;
 }

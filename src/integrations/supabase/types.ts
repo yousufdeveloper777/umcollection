@@ -85,6 +85,51 @@ export type Database = {
           },
         ]
       }
+      coupons: {
+        Row: {
+          code: string
+          created_at: string
+          discount_type: string
+          discount_value: number
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          max_uses: number | null
+          min_order_amount: number
+          per_user_limit: number | null
+          total_discount: number
+          used_count: number
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          min_order_amount?: number
+          per_user_limit?: number | null
+          total_discount?: number
+          used_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          discount_type?: string
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          max_uses?: number | null
+          min_order_amount?: number
+          per_user_limit?: number | null
+          total_discount?: number
+          used_count?: number
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           id: string
@@ -93,6 +138,7 @@ export type Database = {
           product_name: string
           quantity: number
           unit_price: number
+          variant: Json | null
         }
         Insert: {
           id?: string
@@ -101,6 +147,7 @@ export type Database = {
           product_name: string
           quantity: number
           unit_price: number
+          variant?: Json | null
         }
         Update: {
           id?: string
@@ -109,6 +156,7 @@ export type Database = {
           product_name?: string
           quantity?: number
           unit_price?: number
+          variant?: Json | null
         }
         Relationships: [
           {
@@ -130,45 +178,63 @@ export type Database = {
       orders: {
         Row: {
           address: string
+          coupon_code: string | null
           created_at: string
           customer_email: string | null
           customer_id: string | null
           customer_name: string
           customer_phone: string
+          discount_amount: number
           id: string
           notes: string | null
           order_number: number
+          payment_method: string
           payment_status: string
+          shipping_amount: number
           status: string
+          subtotal: number
           total: number
+          tracking_number: string | null
         }
         Insert: {
           address: string
+          coupon_code?: string | null
           created_at?: string
           customer_email?: string | null
           customer_id?: string | null
           customer_name: string
           customer_phone: string
+          discount_amount?: number
           id?: string
           notes?: string | null
           order_number?: never
+          payment_method?: string
           payment_status?: string
+          shipping_amount?: number
           status?: string
+          subtotal?: number
           total?: number
+          tracking_number?: string | null
         }
         Update: {
           address?: string
+          coupon_code?: string | null
           created_at?: string
           customer_email?: string | null
           customer_id?: string | null
           customer_name?: string
           customer_phone?: string
+          discount_amount?: number
           id?: string
           notes?: string | null
           order_number?: never
+          payment_method?: string
           payment_status?: string
+          shipping_amount?: number
           status?: string
+          subtotal?: number
           total?: number
+          tracking_number?: string | null
         }
         Relationships: []
       }
@@ -315,11 +381,56 @@ export type Database = {
         }
         Relationships: []
       }
+      wishlists: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wishlists_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      checkout: {
+        Args: {
+          _address: string
+          _coupon: string
+          _email: string
+          _items: Json
+          _name: string
+          _notes: string
+          _phone: string
+        }
+        Returns: string
+      }
+      coupon_discount: {
+        Args: { _code: string; _subtotal: number }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

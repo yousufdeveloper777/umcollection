@@ -9,3 +9,6 @@
 - [x] Verify all three pages and mobile navigation.
 - [ ] Add prices and order details when supplied by the user.
 - [x] Admin panel at /admin (products, categories, orders, customers, content, settings, audit logs) with online ordering
+- [x] Shop: product pages, cart, checkout (cash on delivery), wishlist, customer account with order tracking, admin coupons
+- [ ] Card payments — blocked: built-in card payments aren't available for Pakistan-registered sellers; Shopify is the only built-in option (would replace the current store)
+- [ ] Later phases from the uploaded plan: shop page filters, newsletter, inventory, reviews/returns/loyalty (user chose coupons only for now)
