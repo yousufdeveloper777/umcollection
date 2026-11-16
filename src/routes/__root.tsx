@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -11,6 +12,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { StoreHeader, StoreFooter } from "@/components/store-shell";
+import { Toaster } from "@/components/ui/sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -127,13 +130,25 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+  const isAdmin = useRouterState({ select: s => s.location.pathname.startsWith("/admin") });
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      queryClient.invalidateQueries({ queryKey: ["auth-user"] });
+      queryClient.invalidateQueries({ queryKey: ["my-roles"] });
+      router.invalidate();
+    });
+    return () => data.subscription.unsubscribe();
+  }, [queryClient, router]);
 
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <StoreHeader />
+      {!isAdmin && <StoreHeader />}
       <Outlet />
-      <StoreFooter />
+      {!isAdmin && <StoreFooter />}
+      <Toaster richColors position="top-center" />
     </QueryClientProvider>
   );
 }

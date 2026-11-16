@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import editorial from "@/assets/collection-editorial.jpg";
-import accessories from "@/assets/accessories-editorial.jpg";
+import { categoriesQuery, contentQuery, productsQuery, type AboutContent, type HomeContent } from "@/lib/store-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -15,26 +16,30 @@ export const Route = createFileRoute("/")({
 });
 
 function CollectionHome() {
+  const { data: home = {} } = useQuery(contentQuery<HomeContent>("home"));
+  const { data: about = {} } = useQuery(contentQuery<AboutContent>("about"));
+  const { data: categories = [] } = useQuery(categoriesQuery);
+  const { data: products = [] } = useQuery(productsQuery);
+  const featured = categories.filter(c => (home.featured_categories ?? ["suits", "bags"]).includes(c.slug));
+  const cover = (slug: string, img: string | null) => img || products.find(p => p.categories?.slug === slug)?.primary_image || editorial;
+  const cta = home.cta_link && home.cta_link.startsWith("/") ? home.cta_link : "/suits";
   return <main>
     <section className="relative h-[520px] overflow-hidden bg-ink md:h-[560px]">
-      <img src={editorial} alt="AI fashion editorial of emerald and rose embroidered suits" width={1536} height={1024} fetchPriority="high" className="absolute inset-0 size-full object-cover object-[65%_center] md:object-top" />
+      <img src={home.background_image || editorial} alt="U M Collection fashion editorial" width={1536} height={1024} fetchPriority="high" className="absolute inset-0 size-full object-cover object-[65%_center] md:object-top" />
       <div className="absolute inset-0 bg-ink/45 md:bg-ink/10" />
       <div className="relative mx-auto flex h-full max-w-[1440px] flex-col justify-center px-5 text-paper sm:px-8 lg:px-14">
-        <p className="mb-5 text-xs text-gold">Style for every side of you</p>
-        <h1 className="max-w-md font-display text-6xl leading-none sm:text-7xl">U M Collection</h1>
-        <p className="mt-5 max-w-xs text-sm leading-6 text-paper/90">Beautiful suits. Thoughtful details.<br />A collection to make your own.</p>
-        <div className="mt-7 flex flex-wrap gap-3"><Button asChild className="rounded-none"><Link to="/suits">Explore suits <ArrowRight /></Link></Button><Button asChild variant="outline" className="rounded-none border-paper/60 bg-ink/30 text-paper hover:bg-ink/60 hover:text-paper"><Link to="/accessories">Bags & accessories</Link></Button></div>
+        <p className="mb-5 text-xs text-gold">{home.eyebrow ?? "Style for every side of you"}</p>
+        <h1 className="max-w-md font-display text-6xl leading-none sm:text-7xl">{home.headline || "U M Collection"}</h1>
+        <p className="mt-5 max-w-xs text-sm leading-6 text-paper/90">{home.subheadline ?? "Beautiful suits. Thoughtful details. A collection to make your own."}</p>
+        <div className="mt-7 flex flex-wrap gap-3"><Button asChild className="rounded-none"><a href={cta}>{home.cta_text || "Explore suits"} <ArrowRight /></a></Button><Button asChild variant="outline" className="rounded-none border-paper/60 bg-ink/30 text-paper hover:bg-ink/60 hover:text-paper"><Link to="/accessories">Bags & accessories</Link></Button></div>
       </div>
-      <span className="absolute bottom-4 right-5 text-[10px] text-paper/75">AI style inspiration</span>
     </section>
     <section className="mx-auto grid max-w-[1440px] gap-5 px-5 py-12 sm:px-8 md:grid-cols-2 md:gap-12 lg:px-14">
-      <div><p className="mb-3 text-xs text-muted-foreground">A little something special</p><h2 className="font-display text-4xl sm:text-5xl">About U M Collection</h2></div>
-      <div className="max-w-xl space-y-4 text-sm leading-7 text-muted-foreground"><p>U M Collection brings together women's suits, dresses and the finishing touches that make an outfit feel yours.</p><p>From embroidered occasion wear to everyday clothing, discover our collection alongside handbags, jewellery, shoes and watches.</p></div>
+      <div><p className="mb-3 text-xs text-muted-foreground">A little something special</p><h2 className="font-display text-4xl sm:text-5xl">{about.title || "About U M Collection"}</h2></div>
+      <div className="max-w-xl space-y-4 whitespace-pre-line text-sm leading-7 text-muted-foreground">{about.body}</div>
     </section>
-    <section className="border-t border-border px-5 py-12 sm:px-8 lg:px-14"><div className="mx-auto max-w-[1328px]"><h2 className="mb-7 font-display text-4xl">Explore the collections</h2><div className="grid gap-8 md:grid-cols-2">
-      <Link to="/suits" className="group"><div className="relative aspect-[4/3] overflow-hidden bg-secondary"><img src={editorial} alt="AI-inspired traditional women's suits" width={1536} height={1024} loading="lazy" className="size-full object-cover object-right" /><span className="absolute bottom-3 right-3 bg-background/90 px-2 py-1 text-[10px]">AI style inspiration</span></div><div className="mt-4 flex items-center justify-between"><h3 className="font-display text-3xl">Suits & clothing</h3><ArrowUpRight className="size-5" /></div><p className="mt-2 text-sm text-muted-foreground">Suits, dresses & loungewear</p></Link>
-      <Link to="/bags" className="group"><div className="relative aspect-[4/3] overflow-hidden bg-secondary"><img src={accessories} alt="AI accessories editorial with handbag, pearl earrings and gold watch" width={1024} height={1024} loading="lazy" className="size-full object-cover" /><span className="absolute bottom-3 right-3 bg-background/90 px-2 py-1 text-[10px]">AI style inspiration</span></div><div className="mt-4 flex items-center justify-between"><h3 className="font-display text-3xl">Bags & accessories</h3><ArrowUpRight className="size-5" /></div><p className="mt-2 text-sm text-muted-foreground">Handbags, jewellery, shoes & watches</p></Link>
-    </div>
-    <div className="mt-10 flex flex-wrap gap-2">{([["Suits", "/suits"], ["Dresses", "/dresses"], ["Loungewear", "/loungewear"], ["Bags", "/bags"], ["Jewellery", "/jewellery"], ["Watches", "/watches"], ["Shoes", "/shoes"], ["Accessories", "/accessories"]] as const).map(([label, to]) => <Button key={to} asChild variant="outline" className="rounded-none"><Link to={to}>{label}</Link></Button>)}</div></div></section>
+    <section className="border-t border-border px-5 py-12 sm:px-8 lg:px-14"><div className="mx-auto max-w-[1328px]"><h2 className="mb-7 font-display text-4xl">Explore the collections</h2>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">{featured.map(c => <a key={c.id} href={`/${c.slug}`} className="group"><div className="aspect-[4/3] overflow-hidden bg-secondary"><img src={cover(c.slug, c.image_url)} alt={c.name} loading="lazy" className="size-full object-cover transition-transform group-hover:scale-105" /></div><div className="mt-4 flex items-center justify-between"><h3 className="font-display text-3xl">{c.name}</h3><ArrowUpRight className="size-5" /></div></a>)}</div>
+      <div className="mt-10 flex flex-wrap gap-2">{categories.map(c => <Button key={c.id} asChild variant="outline" className="rounded-none"><a href={`/${c.slug}`}>{c.name}</a></Button>)}</div></div></section>
   </main>;
 }
