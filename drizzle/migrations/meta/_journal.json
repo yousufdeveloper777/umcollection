@@ -29,6 +29,27 @@
       "when": 1794840811615,
       "tag": "0003_cart_checkout_coupons_wishlist",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794893565816,
+      "tag": "0004_harden_admin_permissions_and_inventory",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794893666211,
+      "tag": "0005_atomic_inventory_import",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794893833718,
+      "tag": "0006_close_admin_signup_and_role_lookup",
+      "breakpoints": true
     }
   ]
 }

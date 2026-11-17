@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { canAccessAdmin } from "@/lib/admin-permissions";
 
 export type AppRole = "super_admin" | "manager" | "viewer" | "customer";
 
@@ -18,15 +19,16 @@ export function useRole() {
     queryKey: ["my-roles", user?.id],
     enabled: !!user,
     queryFn: async () => {
+      if (!user) return { roles: [] as AppRole[], profile: null };
       const [{ data: roles }, { data: profile }] = await Promise.all([
-        supabase.from("user_roles").select("role").eq("user_id", user!.id),
-        supabase.from("profiles").select("full_name, email, is_active").eq("id", user!.id).maybeSingle(),
+        supabase.from("user_roles").select("role").eq("user_id", user.id),
+        supabase.from("profiles").select("full_name, email, is_active").eq("id", user.id).maybeSingle(),
       ]);
       return { roles: (profile?.is_active === false ? [] : (roles ?? []).map(r => r.role)) as AppRole[], profile };
     },
   });
   const roles = q.data?.roles ?? [];
-  const isSuperAdmin = roles.includes("super_admin");
-  const isStaff = isSuperAdmin || roles.includes("manager") || roles.includes("viewer");
+  const isSuperAdmin = canAccessAdmin(roles, q.data?.profile?.is_active === true);
+  const isStaff = isSuperAdmin;
   return { user, profile: q.data?.profile, roles, isSuperAdmin, isStaff, canEdit: isSuperAdmin, isLoading: userLoading || (!!user && q.isLoading) };
 }

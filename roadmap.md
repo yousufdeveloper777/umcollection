@@ -1,5 +1,9 @@
 # Roadmap
 
+- [x] Harden admin-only access, safe role changes, and complete audit records according to the uploaded brief.
+- [x] Improve admin dashboard, add inventory controls, theme toggle, and audit export.
+- [x] Verify admin access and editing with a real signed-in account.
+
 - [x] Build the U M Collection storefront homepage using the relevant uploaded fashion photos.
 - [x] Use the selected Noir & Gold palette and Instrument Serif + Work Sans typography.
 - [x] Verify the homepage and resolve preview build errors.
@@ -11,4 +15,5 @@
 - [x] Admin panel at /admin (products, categories, orders, customers, content, settings, audit logs) with online ordering
 - [x] Shop: product pages, cart, checkout (cash on delivery), wishlist, customer account with order tracking, admin coupons
 - [ ] Card payments — blocked: built-in card payments aren't available for Pakistan-registered sellers; Shopify is the only built-in option (would replace the current store)
-- [ ] Later phases from the uploaded plan: shop page filters, newsletter, inventory, reviews/returns/loyalty (user chose coupons only for now)
+- [ ] Later storefront phases from the uploaded plan: shop page filters, newsletter, reviews/returns/loyalty (outside this admin-focused update).
+- [ ] Replace long-lived product-image links with revocable delivery; the security scan warning remains open and existing links are unchanged.

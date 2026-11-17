@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +16,7 @@ import { ConfirmDialog, FilterSelect, PageHeader, errMsg } from "@/components/ad
 import { useRole, type AppRole } from "@/hooks/use-role";
 import { formatPrice } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/customers")({ component: CustomersPage });
+export const Route = createFileRoute("/_authenticated/admin/customers")({ head: () => adminHead("Customers"), component: CustomersPage });
 
 type Customer = { id: string; full_name: string | null; email: string | null; is_active: boolean; created_at: string; role: AppRole; orders: number; spent: number };
 const ROLES: [string, string][] = [["customer", "Customer"], ["viewer", "Viewer"], ["manager", "Manager"], ["super_admin", "Super admin"]];
@@ -29,9 +30,9 @@ function CustomersPage() {
       const [p, r, o] = await Promise.all([supabase.from("profiles").select("*").order("created_at", { ascending: false }), supabase.from("user_roles").select("user_id, role"), supabase.from("orders").select("customer_id, total, status")]);
       for (const x of [p, r, o]) if (x.error) throw x.error;
       const rank: AppRole[] = ["super_admin", "manager", "viewer", "customer"];
-      return p.data!.map<Customer>(u => {
-        const mine = o.data!.filter(x => x.customer_id === u.id);
-        const roles = r.data!.filter(x => x.user_id === u.id).map(x => x.role);
+      return (p.data ?? []).map<Customer>(u => {
+        const mine = (o.data ?? []).filter(x => x.customer_id === u.id);
+        const roles = (r.data ?? []).filter(x => x.user_id === u.id).map(x => x.role);
         return { ...u, role: rank.find(k => roles.includes(k)) ?? "customer", orders: mine.length, spent: mine.filter(x => x.status !== "cancelled").reduce((s, x) => s + Number(x.total), 0) };
       });
     },
@@ -41,17 +42,10 @@ function CustomersPage() {
   const refresh = () => qc.invalidateQueries({ queryKey: ["admin"] });
 
   async function apply() {
-    const { c, role, active } = pending!;
-    if (role) {
-      const del = await supabase.from("user_roles").delete().eq("user_id", c.id);
-      if (del.error) { toast.error(errMsg(del.error)); throw del.error; }
-      const ins = await supabase.from("user_roles").insert({ user_id: c.id, role });
-      if (ins.error) { toast.error(errMsg(ins.error)); throw ins.error; }
-    }
-    if (active !== undefined) {
-      const { error } = await supabase.from("profiles").update({ is_active: active }).eq("id", c.id);
-      if (error) { toast.error(errMsg(error)); throw error; }
-    }
+    if (!pending) return;
+    const { c, role, active } = pending;
+    const { error } = await supabase.rpc("admin_update_user", { _user_id: c.id, ... (role ? { _role: role } : {}), ...(active !== undefined ? { _active: active } : {}) });
+    if (error) { toast.error(errMsg(error)); throw error; }
     toast.success("User updated"); refresh(); setView(null);
   }
   const columns: ColumnDef<Customer, any>[] = [

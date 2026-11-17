@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ import { FilterSelect, PageHeader, StatusBadge, errMsg } from "@/components/admi
 import { useRole } from "@/hooks/use-role";
 import { formatPrice, settingsQuery } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/orders")({ component: OrdersPage });
+export const Route = createFileRoute("/_authenticated/admin/orders")({ head: () => adminHead("Orders"), component: OrdersPage });
 
 type Order = Tables<"orders"> & { order_items: Tables<"order_items">[] };
 const STATUSES: [string, string][] = [["pending", "Pending"], ["processing", "Processing"], ["shipped", "Shipped"], ["delivered", "Delivered"], ["cancelled", "Cancelled"]];
@@ -29,11 +30,13 @@ function OrdersPage() {
   const { data: settings } = useQuery(settingsQuery);
   const { data = [], isLoading } = useQuery({ queryKey: ["admin", "orders"], queryFn: async () => { const { data, error } = await supabase.from("orders").select("*, order_items(*)").order("created_at", { ascending: false }); if (error) throw error; return data as Order[]; } });
   const [status, setStatus] = useState("all"); const [from, setFrom] = useState(""); const [to, setTo] = useState("");
+  const [payment, setPayment] = useState("all");
+  const [tracking, setTracking] = useState("");
   const [view, setView] = useState<Order | null>(null);
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin"] }); };
-  const rows = data.filter(o => (status === "all" || o.status === status) && (!from || o.created_at >= from) && (!to || o.created_at.slice(0, 10) <= to));
+  const rows = data.filter(o => (payment === "all" || o.payment_status === payment) && (status === "all" || o.status === status) && (!from || o.created_at >= from) && (!to || o.created_at.slice(0, 10) <= to));
 
-  async function update(ids: string[], patch: { status?: string; payment_status?: string }) {
+  async function update(ids: string[], patch: { status?: string; payment_status?: string; tracking_number?: string }) {
     const { error } = await supabase.from("orders").update(patch).in("id", ids);
     if (error) { toast.error(errMsg(error)); return; }
     toast.success("Order updated"); refresh();
@@ -59,7 +62,7 @@ function OrdersPage() {
     { accessorKey: "status", header: "Status", cell: ({ row }) => <StatusBadge status={row.original.status} /> },
     { accessorKey: "payment_status", header: "Payment", cell: ({ row }) => <StatusBadge status={row.original.payment_status} /> },
     { accessorKey: "created_at", header: "Date", cell: ({ row }) => <span className="whitespace-nowrap">{format(new Date(row.original.created_at), "d MMM yyyy, HH:mm")}</span> },
-    { id: "actions", header: "", enableSorting: false, cell: ({ row }) => <div className="flex justify-end gap-1"><Button size="icon" variant="ghost" aria-label="View order" onClick={() => setView(row.original)}><Eye /></Button><Button size="icon" variant="ghost" aria-label="Download invoice" onClick={() => invoice(row.original)}><FileDown /></Button></div> },
+    { id: "actions", header: "", enableSorting: false, cell: ({ row }) => <div className="flex justify-end gap-1"><Button size="icon" variant="ghost" aria-label="View order" onClick={() => { setView(row.original); setTracking(row.original.tracking_number ?? ""); }}><Eye /></Button><Button size="icon" variant="ghost" aria-label="Download invoice" onClick={() => invoice(row.original)}><FileDown /></Button></div> },
   ];
   return <div>
     <PageHeader title="Orders" description="Orders placed on your website." />
@@ -67,6 +70,7 @@ function OrdersPage() {
       searchPlaceholder="Search customer or phone" searchFn={(o, q) => o.customer_name.toLowerCase().includes(q) || o.customer_phone.includes(q) || (o.customer_email ?? "").toLowerCase().includes(q) || String(o.order_number) === q.replace("#", "")}
       toolbar={<>
         <FilterSelect value={status} onChange={setStatus} label="Status" options={[["all", "All statuses"], ...STATUSES]} />
+        <FilterSelect value={payment} onChange={setPayment} label="Payment" options={[["all", "All payments"], ...PAYMENTS]} />
         <Input type="date" aria-label="From date" value={from} onChange={e => setFrom(e.target.value)} className="h-9 w-auto bg-background" />
         <Input type="date" aria-label="To date" value={to} onChange={e => setTo(e.target.value)} className="h-9 w-auto bg-background" />
       </>}
@@ -79,6 +83,7 @@ function OrdersPage() {
         {canEdit ? <div className="grid grid-cols-2 gap-3"><div><Label>Order status</Label><FilterSelect value={view.status} label="Order status" onChange={s => update([view.id], { status: s })} options={STATUSES} /></div><div><Label>Payment status</Label><FilterSelect value={view.payment_status} label="Payment status" onChange={s => update([view.id], { payment_status: s })} options={PAYMENTS} /></div></div>
           : <div className="flex gap-2"><StatusBadge status={view.status} /><StatusBadge status={view.payment_status} /></div>}
         <Button variant="outline" className="w-full" onClick={() => invoice(view)}><FileDown /> Download invoice (PDF)</Button>
+        {canEdit && <div><Label htmlFor="tracking-number">Tracking number</Label><div className="mt-1 flex gap-2"><Input id="tracking-number" maxLength={120} value={tracking} onChange={e => setTracking(e.target.value)} /><Button variant="outline" onClick={() => update([view.id], { tracking_number: tracking.trim() })}>Save</Button></div></div>}
       </div>
     </DialogContent></Dialog>}
   </div>;

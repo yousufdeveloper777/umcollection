@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { uploadImage } from "@/lib/upload";
+import { csvCell } from "@/lib/admin-permissions";
 
 export function PageHeader({ title, description, actions }: { title: string; description?: string | undefined; actions?: ReactNode }) {
   return <div className="mb-6 flex flex-wrap items-end justify-between gap-3"><div><h1 className="font-display text-4xl">{title}</h1>{description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}</div>{actions && <div className="flex flex-wrap gap-2">{actions}</div>}</div>;
@@ -61,9 +62,10 @@ export function ImageUploader({ images, primary, onChange, multiple = true, fold
 
 export function downloadCsv(filename: string, rows: Record<string, unknown>[]) {
   if (!rows.length) return;
-  const keys = Object.keys(rows[0]!);
-  const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
-  const csv = [keys.join(","), ...rows.map(r => keys.map(k => esc(r[k])).join(","))].join("\n");
+  const first = rows[0];
+  if (!first) return;
+  const keys = Object.keys(first);
+  const csv = [keys.map(csvCell).join(","), ...rows.map(r => keys.map(k => csvCell(r[k])).join(","))].join("\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
   a.download = filename; a.click(); URL.revokeObjectURL(a.href);
