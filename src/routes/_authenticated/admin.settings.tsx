@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -14,7 +15,7 @@ import { ImageUploader, PageHeader, errMsg } from "@/components/admin/shared";
 import { useRole } from "@/hooks/use-role";
 import { settingsQuery, type StoreSettings } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/settings")({ component: SettingsPage });
+export const Route = createFileRoute("/_authenticated/admin/settings")({ head: () => adminHead("Settings"), component: SettingsPage });
 
 function SettingsPage() {
   const qc = useQueryClient();

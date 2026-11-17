@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ import { ConfirmDialog, ImageUploader, PageHeader, errMsg } from "@/components/a
 import { useRole } from "@/hooks/use-role";
 import { categoriesQuery, slugify, type Category } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/categories")({ component: CategoriesPage });
+export const Route = createFileRoute("/_authenticated/admin/categories")({ head: () => adminHead("Categories"), component: CategoriesPage });
 
 type Form = { id: string; name: string; slug: string; parent_id: string; image_url: string | null };
 

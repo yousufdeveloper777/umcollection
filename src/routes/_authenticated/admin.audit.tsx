@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { DataTable } from "@/components/admin/data-table";
 import { FilterSelect, PageHeader } from "@/components/admin/shared";
 
-export const Route = createFileRoute("/_authenticated/admin/audit")({ component: AuditPage });
+export const Route = createFileRoute("/_authenticated/admin/audit")({ head: () => adminHead("Audit logs"), component: AuditPage });
 
 type Log = Tables<"audit_logs">;
 

@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { format, formatDistanceToNow, subDays } from "date-fns";
@@ -10,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/admin/shared";
 import { formatPrice } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/")({ component: Dashboard });
+export const Route = createFileRoute("/_authenticated/admin/")({ head: () => adminHead("Dashboard"), component: Dashboard });
 
 function Dashboard() {
   const { data, isLoading } = useQuery({

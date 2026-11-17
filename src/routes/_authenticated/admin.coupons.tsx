@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +16,7 @@ import { formatPrice } from "@/lib/store-data";
 import { useRole } from "@/hooks/use-role";
 
 export const Route = createFileRoute("/_authenticated/admin/coupons")({
-  head: () => ({ meta: [{ title: "Coupons | Admin" }, { name: "robots", content: "noindex" }] }),
+  head: () => adminHead("Coupons"),
   component: CouponsPage,
 });
 

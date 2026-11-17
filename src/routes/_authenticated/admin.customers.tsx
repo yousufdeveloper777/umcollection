@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,7 +16,7 @@ import { ConfirmDialog, FilterSelect, PageHeader, errMsg } from "@/components/ad
 import { useRole, type AppRole } from "@/hooks/use-role";
 import { formatPrice } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/customers")({ component: CustomersPage });
+export const Route = createFileRoute("/_authenticated/admin/customers")({ head: () => adminHead("Customers"), component: CustomersPage });
 
 type Customer = { id: string; full_name: string | null; email: string | null; is_active: boolean; created_at: string; role: AppRole; orders: number; spent: number };
 const ROLES: [string, string][] = [["customer", "Customer"], ["viewer", "Viewer"], ["manager", "Manager"], ["super_admin", "Super admin"]];

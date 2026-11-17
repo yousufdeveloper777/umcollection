@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ import { ConfirmDialog, FilterSelect, ImageUploader, PageHeader, StatusBadge, do
 import { useRole } from "@/hooks/use-role";
 import { categoriesQuery, formatPrice, slugify, type Product } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/products")({ component: ProductsPage });
+export const Route = createFileRoute("/_authenticated/admin/products")({ head: () => adminHead("Products"), component: ProductsPage });
 
 type Variant = { type: string; values: string[] };
 const empty = { id: "", name: "", slug: "", description: "", category_id: "", price: "0", compare_at_price: "", stock: "0", sku: "", images: [] as string[], primary_image: null as string | null, sizes: "", colors: "", status: "active" };

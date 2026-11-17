@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouter, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -49,7 +49,7 @@ function AdminLayout() {
   const qc = useQueryClient();
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
-  const router = Route.useRouter();
+  const router = useRouter();
   useEffect(() => { setDark(localStorage.getItem("um-admin-theme") === "dark"); }, []);
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);

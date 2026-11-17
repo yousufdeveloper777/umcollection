@@ -1,3 +1,4 @@
+import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +18,7 @@ import { FilterSelect, PageHeader, StatusBadge, errMsg } from "@/components/admi
 import { useRole } from "@/hooks/use-role";
 import { formatPrice, settingsQuery } from "@/lib/store-data";
 
-export const Route = createFileRoute("/_authenticated/admin/orders")({ component: OrdersPage });
+export const Route = createFileRoute("/_authenticated/admin/orders")({ head: () => adminHead("Orders"), component: OrdersPage });
 
 type Order = Tables<"orders"> & { order_items: Tables<"order_items">[] };
 const STATUSES: [string, string][] = [["pending", "Pending"], ["processing", "Processing"], ["shipped", "Shipped"], ["delivered", "Delivered"], ["cancelled", "Cancelled"]];
