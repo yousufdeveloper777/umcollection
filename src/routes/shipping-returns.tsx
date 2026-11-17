@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/page-head";
+import { PolicyPage } from "@/components/policy-page";
+export const Route = createFileRoute("/shipping-returns")({ head: () => pageHead("/shipping-returns", "Shipping & Returns", "Read U M Collection's draft shipping, delivery and returns information."), component: () => <PolicyPage title="Shipping & Returns" sections={[{ title: "Shipping", body: "Delivery destinations, shipping fees and dispatch estimates will be confirmed before orders open. Any applicable charges will be shown at checkout." }, { title: "Returns & exchanges", body: "Return eligibility, timeframes and any delivery costs are being finalised. Please contact us before sending an item back." }, { title: "Damaged or incorrect items", body: "Contact us with your order details and photographs if an item arrives damaged or differs from your order." }]} /> });

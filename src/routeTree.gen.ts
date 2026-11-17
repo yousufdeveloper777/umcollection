@@ -20,6 +20,7 @@ import { Route as DressesRouteImport } from './routes/dresses'
 import { Route as JewelleryRouteImport } from './routes/jewellery'
 import { Route as LoungewearRouteImport } from './routes/loungewear'
 import { Route as ShoesRouteImport } from './routes/shoes'
+import { Route as ShopRouteImport } from './routes/shop'
 import { Route as SuitsRouteImport } from './routes/suits'
 import { Route as WatchesRouteImport } from './routes/watches'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -89,6 +90,11 @@ const LoungewearRoute = LoungewearRouteImport.update({
 const ShoesRoute = ShoesRouteImport.update({
   id: '/shoes',
   path: '/shoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShopRoute = ShopRouteImport.update({
+  id: '/shop',
+  path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuitsRoute = SuitsRouteImport.update({
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
   '/shoes': typeof ShoesRoute
+  '/shop': typeof ShopRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -219,6 +226,7 @@ export interface FileRoutesByTo {
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
   '/shoes': typeof ShoesRoute
+  '/shop': typeof ShopRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -248,6 +256,7 @@ export interface FileRoutesById {
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
   '/shoes': typeof ShoesRoute
+  '/shop': typeof ShopRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/loungewear'
     | '/shoes'
+    | '/shop'
     | '/suits'
     | '/watches'
     | '/account'
@@ -306,6 +316,7 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/loungewear'
     | '/shoes'
+    | '/shop'
     | '/suits'
     | '/watches'
     | '/account'
@@ -334,6 +345,7 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/loungewear'
     | '/shoes'
+    | '/shop'
     | '/suits'
     | '/watches'
     | '/_authenticated/account'
@@ -364,6 +376,7 @@ export interface RootRouteChildren {
   JewelleryRoute: typeof JewelleryRoute
   LoungewearRoute: typeof LoungewearRoute
   ShoesRoute: typeof ShoesRoute
+  ShopRoute: typeof ShopRoute
   SuitsRoute: typeof SuitsRoute
   WatchesRoute: typeof WatchesRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -447,6 +460,13 @@ declare module '@tanstack/react-router' {
       path: '/shoes'
       fullPath: '/shoes'
       preLoaderRoute: typeof ShoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shop': {
+      id: '/shop'
+      path: '/shop'
+      fullPath: '/shop'
+      preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/suits': {
@@ -618,6 +638,7 @@ const rootRouteChildren: RootRouteChildren = {
   JewelleryRoute: JewelleryRoute,
   LoungewearRoute: LoungewearRoute,
   ShoesRoute: ShoesRoute,
+  ShopRoute: ShopRoute,
   SuitsRoute: SuitsRoute,
   WatchesRoute: WatchesRoute,
   ProductSlugRoute: ProductSlugRoute,
