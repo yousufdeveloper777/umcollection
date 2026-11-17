@@ -1,8 +1,9 @@
 # Roadmap
 
-- [ ] Upgrade navigation, homepage featured products, Shop, About, Contact and policy pages.
-- [ ] Remove Shopify features and keep the existing independent Cloud catalog/cart at the owner's request.
-- [ ] Add branded share image/favicon and prepare future custom domain; verify desktop/mobile pages.
+- [x] Upgrade navigation, homepage featured products, Shop, About, Contact and policy pages.
+- [x] Disconnect Shopify, remove its features and preserve the independent Cloud catalog/cart at the owner's request.
+- [x] Add branded share image/favicon, hide Lovable badge and verify desktop/mobile pages; future custom domain remains unconnected.
+- [ ] Activate contact email and social links when the owner supplies verified details; draft policies need final terms.
 
 - [x] Harden admin-only access, safe role changes, and complete audit records according to the uploaded brief.
 - [x] Improve admin dashboard, add inventory controls, theme toggle, and audit export.
