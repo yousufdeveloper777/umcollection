@@ -2,6 +2,7 @@
 
 - [ ] Upgrade navigation, homepage featured products, Shop, About, Contact and policy pages.
 - [ ] Connect Shopify catalog and cart checkout; blocked on real product prices and product transfer approval.
+- [ ] Connect this existing storefront to the newly linked Shopify store without deleting the current catalog.
 - [ ] Add branded share image/favicon and prepare future custom domain; verify desktop/mobile pages.
 
 - [x] Harden admin-only access, safe role changes, and complete audit records according to the uploaded brief.
