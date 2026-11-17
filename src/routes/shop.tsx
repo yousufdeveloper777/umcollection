@@ -12,7 +12,7 @@ function Shop() {
   const { data = [], isPending, error } = useQuery(productsQuery);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const types = ["All", ...new Set(data.map(p => p.categories?.name).filter(Boolean))];
+  const types = ["All", ...new Set(data.map(p => p.categories?.name).filter((name): name is string => !!name))];
   const products = data.filter(p => p.name.toLowerCase().includes(search.toLowerCase()) && (category === "All" || p.categories?.name === category));
   return <main className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 lg:px-14"><p className="text-xs text-muted-foreground">THE COLLECTION</p><h1 className="mt-2 font-display text-5xl">Shop U M Collection</h1><div className="my-8 flex flex-wrap items-center justify-between gap-4 border-y border-border py-4"><div className="flex flex-wrap gap-2">{types.map(type => <Button key={type} variant={category === type ? "default" : "ghost"} onClick={() => setCategory(type)}>{type}</Button>)}</div><Input aria-label="Search products" placeholder="Search products" maxLength={100} className="max-w-xs" value={search} onChange={e => setSearch(e.target.value)} /></div>
     <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">{isPending ? Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="aspect-[3/4]" />) : products.map(p => <StoreProductCard key={p.id} product={p} />)}</div>
