@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Menu, X, ArrowUpRight, User, LayoutDashboard, ShoppingBag, Instagram, Facebook } from "lucide-react";
-import { useShopifyCart } from "@/lib/shopify-cart";
-import { ShopifyCartPanel } from "@/components/shopify-cart-panel";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
 import { useRole } from "@/hooks/use-role";
 import { Button } from "@/components/ui/button";
@@ -54,8 +51,5 @@ function AccountLink() {
 
 function CartLink() {
   const { count } = useCart();
-  const { cart, sync } = useShopifyCart();
-  const [open, setOpen] = useState(false);
-  const total = count + (cart?.totalQuantity ?? 0);
-  return <><Button variant="ghost" size="icon" aria-label={`Cart, ${total} items`} className="relative" onClick={() => { setOpen(true); void sync(); }}><ShoppingBag />{total > 0 && <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground">{total}</span>}</Button><Sheet open={open} onOpenChange={setOpen}><SheetContent className="overflow-y-auto"><SheetHeader><SheetTitle>Your cart</SheetTitle><SheetDescription>U M Collection</SheetDescription></SheetHeader><div className="px-5 pb-8"><ShopifyCartPanel /><Button asChild variant="link" className="mt-4"><Link to="/cart" onClick={() => setOpen(false)}>View cart page{count > 0 ? ` · ${count} cash-on-delivery items` : ""}</Link></Button></div></SheetContent></Sheet></>;
+  return <Button asChild variant="ghost" size="icon" aria-label={`Cart, ${count} items`} className="relative"><Link to="/cart"><ShoppingBag />{count > 0 && <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground">{count}</span>}</Link></Button>;
 }

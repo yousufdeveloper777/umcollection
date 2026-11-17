@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import editorial from "@/assets/collection-editorial.jpg";
-import { FeaturedProducts } from "@/components/shopify-products";
+import { FeaturedProducts } from "@/components/featured-products";
 import { categoriesQuery, contentQuery, productsQuery, type AboutContent, type HomeContent } from "@/lib/store-data";
 
 export const Route = createFileRoute("/")({

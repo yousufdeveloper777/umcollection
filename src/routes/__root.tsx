@@ -14,7 +14,6 @@ import { useEffect, type ReactNode } from "react";
 import { StoreHeader, StoreFooter } from "@/components/store-shell";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useCartSync } from "@/lib/shopify-cart";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -129,7 +128,6 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function RootComponent() {
-  useCartSync();
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   const isAdmin = useRouterState({ select: s => s.location.pathname.startsWith("/admin") });
