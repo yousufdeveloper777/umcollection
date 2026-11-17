@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Skeleton } from "@/components/ui/skeleton";
 import { productsQuery, settingsQuery, formatPrice } from "@/lib/store-data";
 import { useCart, useWishlist } from "@/lib/cart";
+import { shopifyProductsQuery } from "@/lib/shopify";
+import { ShopifyDetail } from "@/components/shopify-detail";
 
 export const Route = createFileRoute("/product/$slug")({
   head: ({ params }) => {
@@ -27,6 +29,7 @@ export const Route = createFileRoute("/product/$slug")({
 const sizeChart = [["XS", "32", "26", "35"], ["S", "34", "28", "37"], ["M", "36", "30", "39"], ["L", "38", "32", "41"], ["XL", "40", "34", "43"]];
 
 function ProductPage() {
+  const { data: shopifyProducts = [], isPending: shopifyPending } = useQuery(shopifyProductsQuery);
   const { slug } = Route.useParams();
   const { data: all = [], isLoading } = useQuery(productsQuery);
   const { data: settings } = useQuery(settingsQuery);
@@ -35,8 +38,11 @@ function ProductPage() {
   const [img, setImg] = useState<string | null>(null);
   const [picked, setPicked] = useState<Record<string, string>>({});
   const [zoom, setZoom] = useState(false);
+  const shopifyProduct = shopifyProducts.find(p => p.handle === slug);
+  if (shopifyProduct) return <ShopifyDetail key={shopifyProduct.id} product={shopifyProduct} />;
   if (isLoading) return <main className="mx-auto grid max-w-6xl gap-8 px-5 py-12 md:grid-cols-2"><Skeleton className="aspect-[3/4]" /><Skeleton className="h-60" /></main>;
-  if (!product) return <main className="py-24 text-center"><h1 className="font-display text-4xl">Product not found</h1><Button asChild variant="link"><Link to="/">Back to the store</Link></Button></main>;
+  if (!product && shopifyPending) return <main className="px-5 py-12"><Skeleton className="h-60" /></main>;
+  if (!product) return <main className="py-24 text-center"><h1 className="font-display text-4xl">Product not found</h1><Button asChild variant="link"><Link to="/shop">Back to the store</Link></Button></main>;
   const images = product.images.length ? product.images : [product.primary_image ?? ""];
   const current = img ?? product.primary_image ?? images[0];
   const variants = Array.isArray(product.variants) ? (product.variants as { type: string; values: string[] }[]).filter(v => v.values?.length) : [];

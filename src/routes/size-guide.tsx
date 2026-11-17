@@ -1,0 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { pageHead } from "@/lib/page-head";
+import { PolicyPage } from "@/components/policy-page";
+export const Route = createFileRoute("/size-guide")({ head: () => pageHead("/size-guide", "Size Guide", "Find measurement guidance for U M Collection women's suits and dresses."), component: () => <PolicyPage title="Size Guide" sections={[{ title: "Find your fit", body: "Measure around the fullest part of your bust and hips, and around your natural waist. Keep the measuring tape level without pulling it tight." }, { title: "Product-specific sizing", body: "Measurements vary between styles. Confirm the size and garment measurements with us before ordering. Verified size charts will be added to each clothing product." }, { title: "Between sizes?", body: "Contact us with your measurements and the product name so we can help you choose the right fit." }]} /> });

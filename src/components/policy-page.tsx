@@ -1,0 +1,4 @@
+import { Link } from "@tanstack/react-router";
+export function PolicyPage({ title, sections }: { title: string; sections: { title: string; body: string }[] }) {
+  return <main className="mx-auto max-w-3xl px-5 py-14"><p className="text-xs text-muted-foreground">U M COLLECTION</p><h1 className="mt-3 font-display text-5xl">{title}</h1><p className="mt-4 border-b border-border pb-6 text-sm text-muted-foreground">Draft policy — final terms will be confirmed before online orders open.</p><div className="space-y-8 py-8">{sections.map(section => <section key={section.title}><h2 className="font-display text-2xl">{section.title}</h2><p className="mt-3 text-sm leading-7 text-muted-foreground">{section.body}</p></section>)}</div><Link to="/contact" className="text-sm underline">Contact U M Collection</Link></main>;
+}
