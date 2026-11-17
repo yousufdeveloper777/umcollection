@@ -12,6 +12,8 @@ import { settingsQuery, formatPrice } from "@/lib/store-data";
 import { shippingFor } from "@/lib/cart";
 import { useAuthUser } from "@/hooks/use-role";
 import { useCartLines } from "./cart";
+import { useShopifyCart } from "@/lib/shopify-cart";
+import { ShopifyCartPanel } from "@/components/shopify-cart-panel";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [
@@ -23,6 +25,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function CheckoutPage() {
+  const shopify = useShopifyCart();
   const { cart, lines, subtotal } = useCartLines();
   const { data: settings } = useQuery(settingsQuery);
   const { data: user } = useAuthUser();
@@ -52,7 +55,8 @@ function CheckoutPage() {
   }
   if (done) return <main className="mx-auto max-w-lg px-5 py-24 text-center"><CheckCircle2 className="mx-auto size-12 text-primary" /><h1 className="mt-4 font-display text-5xl">Thank you!</h1><p className="mt-3 text-sm text-muted-foreground">Your order has been placed. We'll call you to confirm before delivery. Please keep cash ready when it arrives.</p>
     <div className="mt-6 flex justify-center gap-2">{user && <Button asChild variant="outline" className="rounded-none"><Link to="/account">View my orders</Link></Button>}<Button asChild className="rounded-none"><Link to="/">Continue shopping</Link></Button></div></main>;
-  if (lines.length === 0) return <main className="py-24 text-center"><p className="text-muted-foreground">Your cart is empty.</p><Button asChild variant="link"><Link to="/suits">Start shopping</Link></Button></main>;
+  if (shopify.cart && lines.length === 0) return <main className="mx-auto max-w-xl px-5 py-12"><h1 className="font-display text-5xl">Checkout</h1><ShopifyCartPanel /></main>;
+  if (lines.length === 0) return <main className="py-24 text-center"><p className="text-muted-foreground">Your cart is empty.</p><Button asChild variant="link"><Link to="/shop">Start shopping</Link></Button></main>;
   return <main className="mx-auto max-w-5xl px-5 py-12">
     <h1 className="font-display text-5xl">Checkout</h1>
     {!user && <p className="mt-2 text-sm text-muted-foreground">Checking out as a guest. <Link to="/auth" search={{ redirect: "/checkout" }} className="underline">Sign in</Link> to track your orders.</p>}

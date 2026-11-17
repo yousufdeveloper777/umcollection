@@ -11,16 +11,21 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AccessoriesRouteImport } from './routes/accessories'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BagsRouteImport } from './routes/bags'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DressesRouteImport } from './routes/dresses'
 import { Route as JewelleryRouteImport } from './routes/jewellery'
 import { Route as LoungewearRouteImport } from './routes/loungewear'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ShippingReturnsRouteImport } from './routes/shipping-returns'
 import { Route as ShoesRouteImport } from './routes/shoes'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as SizeGuideRouteImport } from './routes/size-guide'
 import { Route as SuitsRouteImport } from './routes/suits'
 import { Route as WatchesRouteImport } from './routes/watches'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
@@ -45,6 +50,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccessoriesRoute = AccessoriesRouteImport.update({
@@ -72,6 +82,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DressesRoute = DressesRouteImport.update({
   id: '/dresses',
   path: '/dresses',
@@ -87,6 +102,16 @@ const LoungewearRoute = LoungewearRouteImport.update({
   path: '/loungewear',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShippingReturnsRoute = ShippingReturnsRouteImport.update({
+  id: '/shipping-returns',
+  path: '/shipping-returns',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ShoesRoute = ShoesRouteImport.update({
   id: '/shoes',
   path: '/shoes',
@@ -95,6 +120,11 @@ const ShoesRoute = ShoesRouteImport.update({
 const ShopRoute = ShopRouteImport.update({
   id: '/shop',
   path: '/shop',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SizeGuideRoute = SizeGuideRouteImport.update({
+  id: '/size-guide',
+  path: '/size-guide',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuitsRoute = SuitsRouteImport.update({
@@ -188,16 +218,21 @@ const ApiPublicProductImageRoute = ApiPublicProductImageRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/accessories': typeof AccessoriesRoute
   '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
+  '/privacy': typeof PrivacyRoute
+  '/shipping-returns': typeof ShippingReturnsRoute
   '/shoes': typeof ShoesRoute
   '/shop': typeof ShopRoute
+  '/size-guide': typeof SizeGuideRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -217,16 +252,21 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/accessories': typeof AccessoriesRoute
   '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
+  '/privacy': typeof PrivacyRoute
+  '/shipping-returns': typeof ShippingReturnsRoute
   '/shoes': typeof ShoesRoute
   '/shop': typeof ShopRoute
+  '/size-guide': typeof SizeGuideRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
   '/account': typeof AuthenticatedAccountRoute
@@ -247,16 +287,21 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/about': typeof AboutRoute
   '/accessories': typeof AccessoriesRoute
   '/auth': typeof AuthRoute
   '/bags': typeof BagsRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/dresses': typeof DressesRoute
   '/jewellery': typeof JewelleryRoute
   '/loungewear': typeof LoungewearRoute
+  '/privacy': typeof PrivacyRoute
+  '/shipping-returns': typeof ShippingReturnsRoute
   '/shoes': typeof ShoesRoute
   '/shop': typeof ShopRoute
+  '/size-guide': typeof SizeGuideRoute
   '/suits': typeof SuitsRoute
   '/watches': typeof WatchesRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
@@ -278,16 +323,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/accessories'
     | '/auth'
     | '/bags'
     | '/cart'
     | '/checkout'
+    | '/contact'
     | '/dresses'
     | '/jewellery'
     | '/loungewear'
+    | '/privacy'
+    | '/shipping-returns'
     | '/shoes'
     | '/shop'
+    | '/size-guide'
     | '/suits'
     | '/watches'
     | '/account'
@@ -307,16 +357,21 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/accessories'
     | '/auth'
     | '/bags'
     | '/cart'
     | '/checkout'
+    | '/contact'
     | '/dresses'
     | '/jewellery'
     | '/loungewear'
+    | '/privacy'
+    | '/shipping-returns'
     | '/shoes'
     | '/shop'
+    | '/size-guide'
     | '/suits'
     | '/watches'
     | '/account'
@@ -336,16 +391,21 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/about'
     | '/accessories'
     | '/auth'
     | '/bags'
     | '/cart'
     | '/checkout'
+    | '/contact'
     | '/dresses'
     | '/jewellery'
     | '/loungewear'
+    | '/privacy'
+    | '/shipping-returns'
     | '/shoes'
     | '/shop'
+    | '/size-guide'
     | '/suits'
     | '/watches'
     | '/_authenticated/account'
@@ -367,16 +427,21 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
   AccessoriesRoute: typeof AccessoriesRoute
   AuthRoute: typeof AuthRoute
   BagsRoute: typeof BagsRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
   DressesRoute: typeof DressesRoute
   JewelleryRoute: typeof JewelleryRoute
   LoungewearRoute: typeof LoungewearRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ShippingReturnsRoute: typeof ShippingReturnsRoute
   ShoesRoute: typeof ShoesRoute
   ShopRoute: typeof ShopRoute
+  SizeGuideRoute: typeof SizeGuideRoute
   SuitsRoute: typeof SuitsRoute
   WatchesRoute: typeof WatchesRoute
   ProductSlugRoute: typeof ProductSlugRoute
@@ -397,6 +462,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/accessories': {
@@ -434,6 +506,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dresses': {
       id: '/dresses'
       path: '/dresses'
@@ -455,6 +534,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoungewearRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shipping-returns': {
+      id: '/shipping-returns'
+      path: '/shipping-returns'
+      fullPath: '/shipping-returns'
+      preLoaderRoute: typeof ShippingReturnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/shoes': {
       id: '/shoes'
       path: '/shoes'
@@ -467,6 +560,13 @@ declare module '@tanstack/react-router' {
       path: '/shop'
       fullPath: '/shop'
       preLoaderRoute: typeof ShopRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/size-guide': {
+      id: '/size-guide'
+      path: '/size-guide'
+      fullPath: '/size-guide'
+      preLoaderRoute: typeof SizeGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/suits': {
@@ -629,16 +729,21 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
   AccessoriesRoute: AccessoriesRoute,
   AuthRoute: AuthRoute,
   BagsRoute: BagsRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
   DressesRoute: DressesRoute,
   JewelleryRoute: JewelleryRoute,
   LoungewearRoute: LoungewearRoute,
+  PrivacyRoute: PrivacyRoute,
+  ShippingReturnsRoute: ShippingReturnsRoute,
   ShoesRoute: ShoesRoute,
   ShopRoute: ShopRoute,
+  SizeGuideRoute: SizeGuideRoute,
   SuitsRoute: SuitsRoute,
   WatchesRoute: WatchesRoute,
   ProductSlugRoute: ProductSlugRoute,

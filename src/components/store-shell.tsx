@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Menu, X, ArrowUpRight, User, LayoutDashboard, ShoppingBag } from "lucide-react";
+import { Menu, X, ArrowUpRight, User, LayoutDashboard, ShoppingBag, Instagram, Facebook } from "lucide-react";
+import { useShopifyCart } from "@/lib/shopify-cart";
+import { ShopifyCartPanel } from "@/components/shopify-cart-panel";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useCart } from "@/lib/cart";
 import { useRole } from "@/hooks/use-role";
 import { Button } from "@/components/ui/button";
 
 const pages = [
-  { to: "/", label: "About" },
+  { to: "/", label: "Home" },
+  { to: "/shop", label: "Shop" },
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+] as const;
+const collections = [
   { to: "/suits", label: "Suits" },
   { to: "/dresses", label: "Dresses" },
   { to: "/loungewear", label: "Loungewear" },
@@ -34,7 +42,7 @@ export function StoreHeader() {
 }
 
 export function StoreFooter() {
-  return <footer className="bg-ink text-paper"><div className="mx-auto flex max-w-[1440px] flex-col justify-between gap-6 px-5 py-10 sm:px-8 md:flex-row lg:px-14"><div><Link to="/" className="font-display text-3xl">U M Collection</Link><p className="mt-2 text-xs text-paper/70">A little something special.</p></div><nav aria-label="Footer navigation" className="flex max-w-md flex-wrap items-center gap-x-6 gap-y-3">{pages.map(p => <Link key={p.to} to={p.to} className="inline-flex items-center gap-2 text-xs hover:text-gold">{p.label}<ArrowUpRight className="size-3" /></Link>)}</nav></div></footer>;
+  return <footer className="bg-ink text-paper"><div className="mx-auto grid max-w-[1440px] gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1.4fr_1fr_1fr] lg:px-14"><div><Link to="/" className="font-display text-3xl">U M Collection</Link><p className="mt-3 text-xs text-paper/70">A little something special.</p><div className="mt-5 flex gap-2"><Button asChild variant="ghost" size="icon" title="Ask for our Instagram"><Link to="/contact" aria-label="Instagram contact"><Instagram /></Link></Button><Button asChild variant="ghost" size="icon" title="Ask for our Facebook"><Link to="/contact" aria-label="Facebook contact"><Facebook /></Link></Button></div></div><nav aria-label="Collections" className="grid grid-cols-2 gap-3">{collections.map(p => <Link key={p.to} to={p.to} className="text-xs hover:text-gold">{p.label}</Link>)}</nav><nav aria-label="Footer navigation" className="flex flex-col items-start gap-3">{pages.map(p => <Link key={p.to} to={p.to} className="inline-flex items-center gap-2 text-xs hover:text-gold">{p.label}<ArrowUpRight className="size-3" /></Link>)}<Link to="/shipping-returns" className="text-xs hover:text-gold">Shipping & Returns</Link><Link to="/privacy" className="text-xs hover:text-gold">Privacy Policy</Link><Link to="/size-guide" className="text-xs hover:text-gold">Size Guide</Link></nav></div><div className="border-t border-paper/20 px-5 py-5 text-center text-[10px] text-paper/60">© U M Collection</div></footer>;
 }
 
 function AccountLink() {
@@ -46,5 +54,8 @@ function AccountLink() {
 
 function CartLink() {
   const { count } = useCart();
-  return <Button asChild variant="ghost" size="icon" aria-label={`Cart, ${count} items`} className="relative"><Link to="/cart"><ShoppingBag />{count > 0 && <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground">{count}</span>}</Link></Button>;
+  const { cart, sync } = useShopifyCart();
+  const [open, setOpen] = useState(false);
+  const total = count + (cart?.totalQuantity ?? 0);
+  return <><Button variant="ghost" size="icon" aria-label={`Cart, ${total} items`} className="relative" onClick={() => { setOpen(true); void sync(); }}><ShoppingBag />{total > 0 && <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground">{total}</span>}</Button><Sheet open={open} onOpenChange={setOpen}><SheetContent className="overflow-y-auto"><SheetHeader><SheetTitle>Your cart</SheetTitle><SheetDescription>U M Collection</SheetDescription></SheetHeader><div className="px-5 pb-8"><ShopifyCartPanel /><Button asChild variant="link" className="mt-4"><Link to="/cart" onClick={() => setOpen(false)}>View cart page{count > 0 ? ` · ${count} cash-on-delivery items` : ""}</Link></Button></div></SheetContent></Sheet></>;
 }
