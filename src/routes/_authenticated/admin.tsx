@@ -1,26 +1,29 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ExternalLink, FileText, FolderTree, LayoutDashboard, LogOut, Package, ScrollText, Settings, TicketPercent, ShoppingBag, Users } from "lucide-react";
+import { ExternalLink, FileText, FolderTree, LayoutDashboard, LogOut, Package, ScrollText, Settings, TicketPercent, ShoppingBag, Users, Boxes, Moon, Sun, ShieldCheck, RefreshCw } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useRole } from "@/hooks/use-role";
+import { adminHead } from "@/lib/admin-head";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    const { data: staff } = user ? await supabase.rpc("is_staff", { _user_id: user.id }) : { data: false };
+    const { data: staff } = user ? await supabase.rpc("has_role", { _user_id: user.id, _role: "super_admin" }) : { data: false };
     if (!staff) { toast.error("Access denied."); throw redirect({ to: "/" }); }
   },
-  head: () => ({ meta: [{ title: "Admin | U M Collection" }, { name: "robots", content: "noindex" }] }),
+  head: () => adminHead("Admin"),
   component: AdminLayout,
 });
 
 const nav = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { to: "/admin/products", label: "Products", icon: Package },
+  { to: "/admin/inventory", label: "Inventory", icon: Boxes },
   { to: "/admin/categories", label: "Categories", icon: FolderTree },
   { to: "/admin/orders", label: "Orders", icon: ShoppingBag },
   { to: "/admin/customers", label: "Customers", icon: Users },
@@ -45,6 +48,13 @@ function AdminLayout() {
   const { profile, user, roles } = useRole();
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const [dark, setDark] = useState(false);
+  const router = Route.useRouter();
+  useEffect(() => { setDark(localStorage.getItem("um-admin-theme") === "dark"); }, []);
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", dark);
+    return () => document.documentElement.classList.remove("dark");
+  }, [dark]);
   async function logout() {
     await qc.cancelQueries(); qc.clear();
     await supabase.auth.signOut();
@@ -57,9 +67,12 @@ function AdminLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b border-border bg-background px-3">
           <SidebarTrigger />
+           <span className="hidden items-center gap-1 text-xs text-muted-foreground md:inline-flex"><ShieldCheck className="size-4 text-primary" /> Super admin</span>
           <div className="ml-auto flex items-center gap-2">
             <span className="hidden text-sm sm:inline">{profile?.full_name || user?.email}</span>
             {role && <Badge variant="outline" className="hidden capitalize sm:inline-flex">{role.replace("_", " ")}</Badge>}
+             <Button size="icon" variant="ghost" aria-label="Refresh admin data" title="Refresh admin data" onClick={() => { qc.invalidateQueries(); router.invalidate(); }}><RefreshCw /></Button>
+             <Button size="icon" variant="ghost" aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} title={dark ? "Light mode" : "Dark mode"} onClick={() => { localStorage.setItem("um-admin-theme", dark ? "light" : "dark"); setDark(!dark); }}>{dark ? <Sun /> : <Moon />}</Button>
             <Button asChild variant="ghost" size="sm"><a href="/" target="_blank" rel="noreferrer"><ExternalLink /> <span className="hidden sm:inline">View store</span></a></Button>
             <Button variant="outline" size="sm" onClick={logout}><LogOut /> <span className="hidden sm:inline">Logout</span></Button>
           </div>
