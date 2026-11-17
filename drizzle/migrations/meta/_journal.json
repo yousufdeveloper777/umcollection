@@ -36,6 +36,13 @@
       "when": 1794893565816,
       "tag": "0004_harden_admin_permissions_and_inventory",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794893666211,
+      "tag": "0005_atomic_inventory_import",
+      "breakpoints": true
     }
   ]
 }

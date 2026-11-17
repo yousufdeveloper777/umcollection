@@ -418,6 +418,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_import_stock: { Args: { _items: Json }; Returns: undefined }
       admin_update_user: {
         Args: {
           _active?: boolean
