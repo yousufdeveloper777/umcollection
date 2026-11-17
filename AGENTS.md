@@ -36,7 +36,7 @@ use the editor.
 - Share product data and catalog controls across collection pages, because search and favourites should behave consistently.
 
 - Products, categories, homepage content, settings and orders live in Lovable Cloud tables; the public site and `/admin` read the same data, so never reintroduce static product lists.
-- Admin access is restricted to active super admins by the route gate and RLS; roles live in `user_roles`, changes use an atomic guarded RPC, and serialized first-signup assignment uses existing profiles to prevent re-bootstrap. Frontend `useRole` is only a UI hint.
+- Admin access is restricted to active super admins by the route gate and RLS; roles live in `user_roles`, changes use an atomic guarded RPC, and all new signups are customers now that the owner account exists. Frontend `useRole` is only a UI hint.
 - Product images go to the private `product-images` bucket and are stored as long-lived signed URLs, because public buckets are blocked in this workspace.
 - Cart lives in localStorage; guest wishlist in localStorage and merges into the `wishlists` table on sign-in. Checkout goes through the `checkout` RPC, which reprices items, applies coupons and shipping server-side, because browser totals cannot be trusted.
 
