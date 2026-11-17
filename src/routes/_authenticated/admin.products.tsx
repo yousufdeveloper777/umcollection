@@ -1,3 +1,4 @@
+import { AdminImage } from "@/components/admin/AdminImage";
 import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -41,7 +42,7 @@ function ProductsPage() {
     toast.success("Status updated"); refresh();
   }
   const columns: ColumnDef<Product, any>[] = [
-    { id: "image", header: "Image", cell: ({ row }) => <img src={row.original.primary_image ?? row.original.images[0]} alt="" className="size-10 rounded object-cover" />, enableSorting: false },
+    { id: "image", header: "Image", cell: ({ row }) => <AdminImage src={row.original.primary_image ?? row.original.images[0]} alt="" className="size-10 rounded object-cover" />, enableSorting: false },
     { accessorKey: "name", header: "Name", cell: ({ row }) => <div><p className="font-medium">{row.original.name}</p>{row.original.sku && <p className="text-xs text-muted-foreground">{row.original.sku}</p>}</div> },
     { id: "category", accessorFn: r => r.categories?.name ?? "", header: "Category" },
     { accessorKey: "price", header: "Price", cell: ({ row }) => formatPrice(row.original.price) },

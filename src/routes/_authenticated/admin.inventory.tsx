@@ -1,3 +1,4 @@
+import { AdminImage } from "@/components/admin/AdminImage";
 import { useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -30,7 +31,7 @@ function InventoryPage() {
   const refresh = () => { qc.invalidateQueries({ queryKey: ["products"] }); qc.invalidateQueries({ queryKey: ["admin"] }); };
   const rows = data.filter(p => filter === "all" || (filter === "out" ? p.stock === 0 : isLowStock(p.stock, p.low_stock_threshold)));
   const columns: ColumnDef<Product, unknown>[] = [
-    { accessorKey: "name", header: "Product", cell: ({ row }) => <div className="flex items-center gap-3"><img src={row.original.primary_image ?? row.original.images[0]} alt="" className="size-10 rounded object-cover" /><div><p className="font-medium">{row.original.name}</p><p className="text-xs text-muted-foreground">{row.original.sku || "—"}</p></div></div> },
+    { accessorKey: "name", header: "Product", cell: ({ row }) => <div className="flex items-center gap-3"><AdminImage src={row.original.primary_image ?? row.original.images[0]} alt="" className="size-10 rounded object-cover" /><div><p className="font-medium">{row.original.name}</p><p className="text-xs text-muted-foreground">{row.original.sku || "—"}</p></div></div> },
     { accessorKey: "stock", header: "Stock", cell: ({ row }) => <span className={isLowStock(row.original.stock, row.original.low_stock_threshold) ? "font-semibold text-destructive" : ""}>{row.original.stock}</span> },
     { accessorKey: "low_stock_threshold", header: "Low-stock threshold" },
     { accessorKey: "status", header: "Status", cell: ({ row }) => <StatusBadge status={row.original.status} /> },

@@ -1,3 +1,4 @@
+import { AdminImage } from "@/components/admin/AdminImage";
 import { adminHead } from "@/lib/admin-head";
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
@@ -58,7 +59,7 @@ function Row({ c, parent, count, canEdit, onEdit, onDelete }: { c: Category; par
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: c.id, disabled: !canEdit });
   return <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className="flex items-center gap-3 bg-card p-3">
     {canEdit && <button {...attributes} {...listeners} aria-label={`Reorder ${c.name}`} className="cursor-grab text-muted-foreground"><GripVertical className="size-4" /></button>}
-    {c.image_url ? <img src={c.image_url} alt="" className="size-10 rounded object-cover" /> : <div className="size-10 rounded bg-secondary" />}
+    {c.image_url ? <AdminImage src={c.image_url} alt="" className="size-10 rounded object-cover" /> : <div className="size-10 rounded bg-secondary" />}
     <div className="min-w-0 flex-1"><p className="font-medium">{c.name}</p><p className="text-xs text-muted-foreground">/{c.slug}{parent ? ` · in ${parent}` : ""}</p></div>
     <span className="text-xs text-muted-foreground">{count} products</span>
     {canEdit && <><Button size="icon" variant="ghost" aria-label={`Edit ${c.name}`} onClick={onEdit}><Pencil /></Button><Button size="icon" variant="ghost" aria-label={`Delete ${c.name}`} onClick={onDelete}><Trash2 className="text-destructive" /></Button></>}
