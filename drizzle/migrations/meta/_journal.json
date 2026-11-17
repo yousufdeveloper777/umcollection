@@ -29,6 +29,13 @@
       "when": 1794840811615,
       "tag": "0003_cart_checkout_coupons_wishlist",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794893565816,
+      "tag": "0004_harden_admin_permissions_and_inventory",
+      "breakpoints": true
     }
   ]
 }
