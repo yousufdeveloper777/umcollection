@@ -42,5 +42,5 @@ use the editor.
 
 - Inventory CSV imports use Papa Parse and an admin-only atomic RPC so invalid rows never partially update stock.
 - Admin exports neutralize spreadsheet formulas; audit triggers retain old/new values and logs remain read-only.
-- The Shopify Shop page and featured section use the live Storefront API catalog and a separate persisted, server-synced Zustand cart; legacy Cloud category previews and cash-on-delivery orders remain intact until the owner approves product transfer and supplies prices.
+- The Shop page, homepage featured products and category pages share the existing Cloud catalog and local cart; keep the storefront independent and never introduce a second commerce catalog.
 - Store information pages share leaf metadata and draft policy presentation; contact enquiries open the user's email app only when a valid business address is configured, never pretend delivery occurred.

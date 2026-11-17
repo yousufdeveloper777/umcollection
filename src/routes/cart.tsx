@@ -4,7 +4,6 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { productsQuery, settingsQuery, formatPrice } from "@/lib/store-data";
 import { shippingFor, useCart } from "@/lib/cart";
-import { ShopifyCartPanel } from "@/components/shopify-cart-panel";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [
@@ -29,9 +28,7 @@ function CartPage() {
   const ship = shippingFor(subtotal, settings);
   return <main className="mx-auto max-w-5xl px-5 py-12">
     <h1 className="font-display text-5xl">Your cart</h1>
-    <section className="mt-6 border-b border-border pb-8"><ShopifyCartPanel /></section>
-    {lines.length > 0 && <h2 className="mt-8 font-display text-3xl">Cash-on-delivery collection</h2>}
-    {!isLoading && lines.length === 0 ? <div className="py-16 text-center"><p className="text-muted-foreground">Your cart is empty.</p><Button asChild className="mt-4 rounded-none"><Link to="/suits">Start shopping</Link></Button></div> :
+    {!isLoading && lines.length === 0 ? <div className="py-16 text-center"><p className="text-muted-foreground">Your cart is empty.</p><Button asChild className="mt-4 rounded-none"><Link to="/shop">Start shopping</Link></Button></div> :
     <div className="mt-8 grid gap-10 md:grid-cols-[1fr_300px]">
       <ul className="divide-y divide-border border-y border-border">{lines.map(l => <li key={l.key} className="flex gap-4 py-4">
         <img src={l.product!.primary_image ?? l.product!.images[0]} alt={l.product!.name} className="h-28 w-20 bg-secondary object-contain" />
