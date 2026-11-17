@@ -1,5 +1,9 @@
 # Roadmap
 
+- [ ] Harden admin-only access, safe role changes, and complete audit records according to the uploaded brief.
+- [ ] Improve admin dashboard, add inventory controls, theme toggle, and audit export.
+- [ ] Verify admin access and editing with a real signed-in account.
+
 - [x] Build the U M Collection storefront homepage using the relevant uploaded fashion photos.
 - [x] Use the selected Noir & Gold palette and Instrument Serif + Work Sans typography.
 - [x] Verify the homepage and resolve preview build errors.
