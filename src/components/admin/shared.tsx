@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { uploadImage } from "@/lib/upload";
 import { csvCell } from "@/lib/admin-permissions";
+import { AdminImage } from "@/components/admin/AdminImage";
 
 export function PageHeader({ title, description, actions }: { title: string; description?: string | undefined; actions?: ReactNode }) {
   return <div className="mb-6 flex flex-wrap items-end justify-between gap-3"><div><h1 className="font-display text-4xl">{title}</h1>{description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}</div>{actions && <div className="flex flex-wrap gap-2">{actions}</div>}</div>;
@@ -49,7 +50,7 @@ export function ImageUploader({ images, primary, onChange, multiple = true, fold
   }
   return <div className="flex flex-wrap gap-2">
     {images.map(u => <div key={u} className={`relative size-20 overflow-hidden rounded border-2 ${u === primary ? "border-primary" : "border-border"}`}>
-      <img src={u} alt="" className="size-full object-cover" />
+      <AdminImage src={u} alt="" className="size-full object-cover" />
       {multiple && <button type="button" aria-label="Set as primary image" onClick={() => onChange(images, u)} className="absolute bottom-1 left-1 rounded bg-background/90 p-0.5"><Star className={`size-3 ${u === primary ? "fill-primary text-primary" : ""}`} /></button>}
       <button type="button" aria-label="Remove image" onClick={() => { const next = images.filter(x => x !== u); onChange(next, u === primary ? next[0] ?? null : primary ?? null); }} className="absolute right-1 top-1 rounded bg-background/90 p-0.5"><X className="size-3" /></button>
     </div>)}

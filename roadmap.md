@@ -16,4 +16,4 @@
 - [x] Shop: product pages, cart, checkout (cash on delivery), wishlist, customer account with order tracking, admin coupons
 - [ ] Card payments — blocked: built-in card payments aren't available for Pakistan-registered sellers; Shopify is the only built-in option (would replace the current store)
 - [ ] Later storefront phases from the uploaded plan: shop page filters, newsletter, reviews/returns/loyalty (outside this admin-focused update).
-- [ ] Replace long-lived product-image links with revocable delivery; the security scan warning remains open and existing links are unchanged.
+- [x] Replace long-lived product-image links with revocable delivery; private admin previews and immediate withdrawal of public image access verified.

@@ -35,6 +35,7 @@ import { Route as AuthenticatedAdminInventoryRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminOrdersRouteImport } from './routes/_authenticated/admin.orders'
 import { Route as AuthenticatedAdminProductsRouteImport } from './routes/_authenticated/admin.products'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as ApiPublicProductImageRouteImport } from './routes/api/public/product-image'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -173,6 +174,11 @@ const AuthenticatedAdminSettingsRoute =
     path: '/settings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const ApiPublicProductImageRoute = ApiPublicProductImageRouteImport.update({
+  id: '/api/public/product-image',
+  path: '/api/public/product-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/api/public/product-image': typeof ApiPublicProductImageRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -225,6 +232,7 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/admin/products': typeof AuthenticatedAdminProductsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/api/public/product-image': typeof ApiPublicProductImageRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -254,6 +262,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/orders': typeof AuthenticatedAdminOrdersRoute
   '/_authenticated/admin/products': typeof AuthenticatedAdminProductsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/api/public/product-image': typeof ApiPublicProductImageRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -283,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/settings'
+    | '/api/public/product-image'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -309,6 +319,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/products'
     | '/admin/settings'
+    | '/api/public/product-image'
     | '/admin'
   id:
     | '__root__'
@@ -337,6 +348,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/orders'
     | '/_authenticated/admin/products'
     | '/_authenticated/admin/settings'
+    | '/api/public/product-image'
     | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -355,6 +367,7 @@ export interface RootRouteChildren {
   SuitsRoute: typeof SuitsRoute
   WatchesRoute: typeof WatchesRoute
   ProductSlugRoute: typeof ProductSlugRoute
+  ApiPublicProductImageRoute: typeof ApiPublicProductImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -541,6 +554,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/api/public/product-image': {
+      id: '/api/public/product-image'
+      path: '/api/public/product-image'
+      fullPath: '/api/public/product-image'
+      preLoaderRoute: typeof ApiPublicProductImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -601,6 +621,7 @@ const rootRouteChildren: RootRouteChildren = {
   SuitsRoute: SuitsRoute,
   WatchesRoute: WatchesRoute,
   ProductSlugRoute: ProductSlugRoute,
+  ApiPublicProductImageRoute: ApiPublicProductImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

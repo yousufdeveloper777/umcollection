@@ -1,3 +1,4 @@
+import { AdminImage } from "@/components/admin/AdminImage";
 import { adminHead } from "@/lib/admin-head";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -64,7 +65,7 @@ function Dashboard() {
         {orders.length === 0 ? <p className="border-y border-border py-6 text-sm text-muted-foreground">No orders yet.</p> : <ul className="divide-y divide-border border-y border-border">{orders.slice(0,5).map(o => <li key={o.id} className="flex flex-wrap items-center justify-between gap-3 py-3"><div><p className="text-sm font-medium">#{o.order_number} · {o.customer_name}</p><p className="text-xs text-muted-foreground">{format(new Date(o.created_at), "d MMM yyyy")}</p></div><div className="flex items-center gap-3 text-sm"><StatusBadge status={o.status} />{formatPrice(o.total)}</div></li>)}</ul>}
       </section>
       <section className="min-w-0"><div className="mb-3 flex items-center justify-between"><h2 className="text-base font-semibold">Low-stock alerts</h2><Button asChild variant="ghost" size="sm"><Link to="/admin/inventory">Inventory</Link></Button></div>
-        {lowProducts.length === 0 ? <p className="border-y border-border py-6 text-sm text-muted-foreground">No low-stock alerts.</p> : <ul className="divide-y divide-border border-y border-border">{lowProducts.slice(0,5).map(p => <li key={p.id} className="flex items-center gap-3 py-3"><img src={p.primary_image ?? undefined} alt="" className="size-10 rounded object-cover" /><p className="min-w-0 flex-1 text-sm">{p.name}</p><span className="text-sm font-semibold text-destructive">{p.stock} left</span></li>)}</ul>}
+        {lowProducts.length === 0 ? <p className="border-y border-border py-6 text-sm text-muted-foreground">No low-stock alerts.</p> : <ul className="divide-y divide-border border-y border-border">{lowProducts.slice(0,5).map(p => <li key={p.id} className="flex items-center gap-3 py-3"><AdminImage src={p.primary_image ?? undefined} alt="" className="size-10 rounded object-cover" /><p className="min-w-0 flex-1 text-sm">{p.name}</p><span className="text-sm font-semibold text-destructive">{p.stock} left</span></li>)}</ul>}
       </section>
     </div>
   </div>;
